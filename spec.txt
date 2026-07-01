@@ -1,0 +1,1139 @@
+Projeto da central de solicitações ao marketing da VendaMais
+Objetivo do projeto
+Criar um sistema web interno para organizar todas as solicitações feitas ao marketing da VendaMais.
+O sistema deve substituir pedidos soltos por WhatsApp, e-mail, reuniões ou conversas informais por um fluxo único, estruturado e rastreável.
+Toda solicitação de marketing deverá ser cadastrada no sistema, incluindo briefing, objetivo, prazo, arquivos, nível de prioridade e responsável pela aprovação.
+O sistema também deverá calcular se a demanda cabe ou não na capacidade semanal do marketing, usando uma lógica de pesos configuráveis por tipo de demanda.
+Nome sugerido do sistema
+Central de solicitações ao marketing
+Problema que o sistema resolve
+Hoje as demandas de marketing podem chegar de formas diferentes, com briefings incompletos, prazos irreais e sem visão clara da fila.
+O sistema precisa resolver os seguintes problemas:
+Centralizar todos os pedidos em um único lugar
+Obrigar o preenchimento mínimo de briefing antes da demanda entrar na fila
+Mostrar ao solicitante que existem outras demandas em andamento
+Calcular se o prazo solicitado é viável ou não
+Permitir que o marketing aceite, reprograme ou devolva a solicitação
+Gerar uma agenda visual de produção
+Enviar notificações por e-mail
+Criar histórico de tudo o que foi solicitado, aprovado, entregue ou cancelado
+Permitir ajuste de capacidade semanal, porque algumas semanas terão mais ou menos disponibilidade
+Conceito principal
+Cada solicitação terá:
+Tipo de demanda
+Peso da demanda
+Prazo mínimo recomendado
+Data desejada pelo solicitante
+Data real de uso
+Status
+Prioridade
+Responsável
+Briefing
+Arquivos anexos
+Data prevista de entrega calculada pelo sistema
+Data final aprovada pelo marketing
+O sistema deverá comparar o peso da nova demanda com a capacidade disponível na semana solicitada.
+Se a semana já estiver cheia, o sistema deverá sugerir a próxima semana disponível.
+Perfis de usuário
+1. Solicitante
+Pessoa da VendaMais que abre uma solicitação.
+Pode:
+Criar nova solicitação
+Ver as próprias solicitações
+Ver status
+Receber atualizações por e-mail
+Complementar briefing quando solicitado
+Visualizar previsão de entrega
+Visualizar fila geral de forma resumida, sem detalhes estratégicos
+Não pode:
+Alterar peso da demanda
+Alterar capacidade semanal
+Mudar status de produção
+Aprovar prazo final
+Ver detalhes confidenciais de demandas de outras áreas
+2. Administrador de marketing
+Pessoa responsável pela triagem e gestão das demandas.
+Pode:
+Ver todas as solicitações
+Alterar status
+Alterar prioridade
+Ajustar peso da demanda
+Ajustar prazo final
+Definir responsável
+Devolver briefing incompleto
+Aprovar ou recusar prazo solicitado
+Reprogramar entrega
+Configurar tipos de demanda
+Configurar pesos
+Configurar prazos mínimos
+Configurar capacidade semanal
+Criar bloqueios de agenda
+Ver relatórios
+3. Gestor ou diretoria, opcional
+Perfil somente leitura.
+Pode:
+Ver fila geral
+Ver indicadores
+Ver demandas em atraso
+Ver demandas por área
+Ver capacidade ocupada
+Páginas principais do sistema
+1. Página inicial do solicitante
+Deve mostrar:
+Botão para abrir nova solicitação
+Minhas solicitações abertas
+Status das solicitações
+Prazo previsto de entrega
+Aviso sobre prazo mínimo
+Link para política de solicitações ao marketing
+Mensagem sugerida:
+Antes de abrir uma solicitação, verifique se todas as informações estão completas. Pedidos sem briefing suficiente poderão ser devolvidos pelo marketing e não entrarão na fila de produção.
+2. Nova solicitação
+Formulário completo para abertura de demanda.
+3. Minhas solicitações
+Tabela com:
+Código da solicitação
+Título
+Tipo
+Status
+Data solicitada
+Data prevista
+Última atualização
+Botão para abrir detalhes
+4. Fila geral do marketing
+Visão resumida para todos os usuários.
+Campos visíveis:
+Ordem
+Tipo de demanda
+Área solicitante
+Status
+Semana prevista
+Prazo previsto
+Não mostrar:
+Valor comercial
+Cliente estratégico, quando marcado como confidencial
+Briefing completo
+Arquivos anexos
+Comentários internos
+5. Painel do administrador
+Deve mostrar:
+Demandas recebidas
+Demandas em triagem
+Demandas aguardando briefing
+Demandas aprovadas para produção
+Demandas em produção
+Demandas em revisão
+Demandas atrasadas
+Demandas entregues
+Capacidade semanal usada
+Capacidade semanal disponível
+Próximas entregas
+6. Calendário de produção
+Visualização semanal e mensal com:
+Demandas por data prevista de entrega
+Cor por status
+Peso da demanda
+Responsável
+Indicador de semana cheia
+Indicador de semana acima da capacidade
+7. Configurações
+Área administrativa para configurar:
+Tipos de demanda
+Peso padrão de cada demanda
+Prazo mínimo por demanda
+Capacidade semanal padrão
+Capacidade específica por semana
+Dias úteis
+Feriados
+Bloqueios de agenda
+E-mails automáticos
+Textos de aviso ao solicitante
+Fluxo geral da solicitação
+Etapa 1: solicitante abre o pedido
+A pessoa acessa o sistema e preenche a ficha.
+Ao enviar, o sistema:
+Cria a solicitação
+Gera um código único
+Define status como Recebido
+Calcula peso inicial com base no tipo de demanda
+Calcula prazo mínimo
+Verifica se o prazo solicitado é viável
+Sugere data prevista de entrega
+Envia e-mail ao solicitante
+Envia e-mail ao administrador de marketing
+Etapa 2: sistema calcula viabilidade
+O sistema verifica:
+A data desejada respeita o prazo mínimo?
+A semana solicitada tem capacidade disponível?
+O briefing está completo?
+A demanda é urgente?
+A demanda depende de aprovação de terceiros?
+A demanda tem arquivos obrigatórios anexados?
+Com base nisso, o sistema classifica a solicitação como:
+Viável
+Viável com atenção
+Prazo inviável
+Briefing incompleto
+Capacidade indisponível
+Etapa 3: marketing faz triagem
+O administrador pode:
+Aprovar prazo solicitado
+Reprogramar prazo
+Devolver para complemento
+Cancelar
+Alterar peso
+Alterar prioridade
+Alterar responsável
+Marcar como confidencial
+Enviar comentário ao solicitante
+Etapa 4: produção
+Quando aprovada, a demanda entra na fila com status Aprovado para produção.
+Depois pode passar por:
+Em produção
+Em revisão
+Ajustes solicitados
+Entregue
+Etapa 5: encerramento
+Ao entregar, o sistema registra:
+Data de entrega
+Responsável pela entrega
+Arquivos finais ou links
+Observações finais
+Se foi entregue no prazo ou fora do prazo
+Status das solicitações
+O sistema deve ter os seguintes status:
+Recebido
+Em triagem
+Aguardando briefing
+Aguardando aprovação de prazo
+Aprovado para produção
+Em produção
+Em revisão
+Ajustes solicitados
+Entregue
+Cancelado
+Recusado
+Regras dos status
+Recebido
+Status automático após envio do formulário.
+A demanda ainda não está oficialmente aceita pelo marketing.
+Em triagem
+Marketing está analisando briefing, prazo e capacidade.
+Aguardando briefing
+Usado quando faltam informações.
+Demandas nesse status não devem consumir capacidade da agenda, a não ser que o administrador marque manualmente como Reservar capacidade.
+Aguardando aprovação de prazo
+Usado quando o prazo solicitado é inviável e o marketing sugeriu nova data.
+Aprovado para produção
+Demanda aceita e já considerada na capacidade semanal.
+Em produção
+Demanda está sendo executada.
+Em revisão
+Material foi produzido e está em análise interna ou do solicitante.
+Ajustes solicitados
+Existem mudanças pedidas após a primeira versão.
+Pode consumir capacidade adicional se o administrador marcar os ajustes como relevantes.
+Entregue
+Demanda finalizada.
+Não consome mais capacidade.
+Cancelado
+Demanda retirada pelo solicitante ou pelo marketing.
+Não consome capacidade.
+Recusado
+Demanda não será feita, por falta de aderência, falta de prioridade ou decisão interna.
+Não consome capacidade.
+Tipos de demanda, pesos e prazos mínimos
+Os pesos devem ser configuráveis pelo administrador.
+A tabela abaixo deve ser cadastrada como padrão inicial.
+Tipo de demanda
+Peso padrão
+Prazo mínimo recomendado
+Mensagem de WhatsApp
+1
+1 dia útil
+Texto simples
+1
+2 dias úteis
+Ajuste simples em material existente
+1
+2 dias úteis
+Post simples
+1
+3 dias úteis
+Arte simples para redes sociais
+1
+3 dias úteis
+E-mail marketing
+1
+3 dias úteis
+Copy para postagem
+1
+2 dias úteis
+Carrossel
+2
+5 dias úteis
+Proposta comercial simples
+2
+3 dias úteis
+Apresentação simples
+2
+4 dias úteis
+Peça para evento simples
+2
+5 dias úteis
+Folder
+3
+7 dias úteis
+Proposta comercial personalizada
+3
+5 a 7 dias úteis
+Apresentação comercial personalizada
+3
+5 a 7 dias úteis
+Sequência de e-mails
+3
+7 dias úteis
+Kit de peças para campanha pequena
+4
+10 dias úteis
+Landing page simples
+4
+10 dias úteis
+Material institucional novo
+5
+12 dias úteis
+Campanha de marketing
+5
+15 dias úteis
+Material completo para evento
+6
+20 dias úteis
+Lançamento de produto ou serviço
+8
+30 dias úteis
+Projeto especial de marketing
+8
+30 dias úteis
+Reformulação de página do site
+8
+20 dias úteis
+Criação de nova área no site
+13
+30 a 45 dias úteis
+Regra dos pesos
+Peso não é hora exata.
+Peso é uma medida de esforço relativo.
+Exemplo:
+Peso 1: demanda simples, rápida e previsível
+Peso 2: demanda simples, mas com mais etapas
+Peso 3: demanda média, exige criação e revisão
+Peso 5: demanda complexa, envolve estratégia
+Peso 8: demanda grande, exige planejamento
+Peso 13: projeto especial, não deve entrar como demanda comum
+Capacidade semanal
+O sistema deve permitir configurar a capacidade semanal do marketing em pontos.
+Capacidade padrão sugerida:
+Semana
+Capacidade padrão
+Semana normal
+20 pontos
+Semana com pouco tempo
+10 pontos
+Semana muito ocupada
+5 pontos
+Semana com alta disponibilidade
+30 pontos
+Semana bloqueada
+0 pontos
+O administrador deve conseguir alterar a capacidade de cada semana manualmente.
+Exemplo:
+Semana de evento: 5 pontos
+Semana normal: 20 pontos
+Semana com foco em marketing: 30 pontos
+Semana de viagem: 0 ou 5 pontos
+Tela de configuração de capacidade
+Campos necessários:
+Semana
+Data inicial
+Data final
+Capacidade em pontos
+Observação
+Bloqueada? Sim ou não
+Motivo do bloqueio
+Exemplo:
+Semana
+Capacidade
+Observação
+24/06 a 28/06
+20
+Semana normal
+01/07 a 05/07
+8
+Evento externo
+08/07 a 12/07
+30
+Semana com mais disponibilidade
+Como calcular ocupação da semana
+Ocupação da semana = soma dos pesos das demandas com entrega prevista naquela semana.
+Considerar na soma apenas demandas com status:
+Aprovado para produção
+Em produção
+Em revisão
+Ajustes solicitados
+Aguardando aprovação de prazo, se o administrador marcou como Reservar capacidade
+Não considerar na soma demandas com status:
+Recebido
+Em triagem
+Aguardando briefing
+Entregue
+Cancelado
+Recusado
+Exceção:
+O administrador pode marcar qualquer demanda como Reservar capacidade. Nesse caso, ela entra na soma mesmo antes de estar aprovada.
+Fórmula de capacidade
+Capacidade disponível da semana = capacidade configurada da semana - pontos já ocupados
+Exemplo:
+Capacidade da semana: 20 pontos
+Demandas já aprovadas: 16 pontos
+Nova demanda: 5 pontos
+Resultado:
+16 + 5 = 21
+A demanda ultrapassa a capacidade da semana em 1 ponto.
+O sistema deve mostrar:
+Prazo solicitado acima da capacidade disponível. A semana solicitada possui 4 pontos disponíveis, mas esta demanda exige 5 pontos. Sugestão: reprogramar para a próxima semana com capacidade disponível.
+Classificação automática de viabilidade
+Verde: viável
+Condições:
+Briefing completo
+Data solicitada respeita prazo mínimo
+Semana tem capacidade disponível
+Peso da demanda cabe na semana
+Mensagem:
+Sua solicitação está dentro da capacidade estimada. O prazo ainda será confirmado pelo marketing após triagem.
+Amarelo: atenção
+Condições possíveis:
+Prazo no limite
+Semana ficará com 90% ou mais da capacidade ocupada
+Demanda depende de aprovação de terceiros
+Prioridade alta sem justificativa clara
+Falta algum anexo não obrigatório
+Mensagem:
+Sua solicitação pode ser viável, mas depende da triagem do marketing. A semana solicitada está próxima do limite de capacidade.
+Vermelho: inviável
+Condições possíveis:
+Data solicitada menor que o prazo mínimo
+Semana sem capacidade disponível
+Briefing incompleto
+Demanda crítica sem justificativa
+Arquivos obrigatórios ausentes
+Tipo de demanda exige planejamento maior
+Mensagem:
+O prazo solicitado não é viável com base na fila atual ou no prazo mínimo recomendado. O marketing irá sugerir uma nova data.
+Regra de prazo mínimo
+O sistema deve calcular a menor data possível de entrega considerando:
+Data atual
+Dias úteis
+Prazo mínimo do tipo de demanda
+Feriados cadastrados
+Bloqueios de agenda
+Exemplo:
+Hoje é segunda-feira.
+Uma proposta personalizada tem prazo mínimo de 7 dias úteis.
+A menor data sugerida deve ser a próxima quarta-feira da semana seguinte, considerando apenas dias úteis.
+Regra de busca da próxima data disponível
+Quando a semana solicitada não tiver capacidade, o sistema deverá procurar automaticamente a próxima semana disponível.
+Lógica:
+Identificar o peso da demanda
+Identificar a data mínima permitida pelo prazo mínimo
+Verificar a semana da data solicitada
+Calcular capacidade disponível da semana
+Se couber, sugerir a data solicitada
+Se não couber, avançar para a próxima semana
+Repetir até encontrar semana com capacidade suficiente
+Sugerir data de entrega dentro da primeira semana possível
+Exemplo prático
+Demanda: folderPeso: 3Prazo mínimo: 7 dias úteisData desejada: 25/06Semana de 24/06: capacidade disponível de 2 pontos
+Resultado:
+A demanda não cabe na semana solicitada.
+Sistema sugere:
+Data provável de entrega: próxima semana disponível com pelo menos 3 pontos livres.
+Distribuição de demandas grandes
+Demandas com peso 8 ou mais podem ser tratadas como projeto.
+O sistema deve oferecer duas opções:
+Alocar tudo na semana de entrega
+Distribuir a carga entre semanas
+Exemplo:
+Lançamento de produtoPeso: 8Entrega final em 30 dias
+O administrador pode distribuir:
+Semana 1: 2 pontos
+Semana 2: 2 pontos
+Semana 3: 2 pontos
+Semana 4: 2 pontos
+Isso evita concentrar todo o peso na semana final.
+Campo de distribuição manual
+Para demandas grandes, criar uma área chamada Alocação de esforço.
+Campos:
+Semana
+Pontos alocados
+Observação
+Exemplo:
+Semana
+Pontos
+Semana 1
+2
+Semana 2
+2
+Semana 3
+2
+Semana 4
+2
+A soma dos pontos alocados deve ser igual ao peso total da demanda.
+Prioridade
+A prioridade não deve substituir automaticamente a capacidade.
+Prioridade serve para ordenar a fila e indicar urgência, mas não deve permitir que toda demanda vire urgente.
+Níveis:
+Baixa
+Normal
+Alta
+Crítica
+Regras de prioridade
+Baixa
+Demandas sem data crítica, sem impacto imediato em vendas, evento ou cliente.
+Normal
+Demandas comuns do dia a dia.
+Alta
+Demandas importantes ligadas a cliente, proposta, campanha, reunião ou oportunidade comercial.
+Exige justificativa.
+Crítica
+Demandas urgentes com impacto real em:
+Receita
+Cliente estratégico
+Evento com data marcada
+Diretoria
+Lançamento já aprovado
+Erro que precisa ser corrigido
+Exige justificativa obrigatória.
+Demandas críticas devem aparecer destacadas para o administrador, mas ainda precisam passar por triagem.
+Pontuação de prioridade, opcional
+O sistema pode calcular uma pontuação para ordenar a fila.
+Fórmula sugerida:
+Pontuação = prioridade base + impacto comercial + proximidade da data de uso - penalidade por briefing incompleto
+Prioridade base:
+Baixa: 10
+Normal: 40
+Alta: 70
+Crítica: 100
+Impacto comercial:
+Sem impacto direto: 0
+Comunicação interna: 5
+Cliente ativo: 10
+Proposta comercial: 20
+Campanha de vendas: 20
+Evento: 25
+Diretoria: 25
+Lançamento: 30
+Proximidade da data de uso:
+Mais de 30 dias: 0
+Entre 15 e 30 dias: 10
+Entre 8 e 14 dias: 20
+Entre 4 e 7 dias: 30
+Até 3 dias: 40
+Penalidade:
+Briefing incompleto: -50
+Sem arquivo obrigatório: -30
+Sem aprovação definida: -10
+Exemplo:
+Demanda crítica para proposta comercial com data de uso em 5 dias e briefing completo:
+100 + 20 + 30 = 150 pontos
+Formulário de solicitação
+Bloco 1: dados do solicitante
+Campos:
+Nome
+Área
+E-mail
+WhatsApp
+Quem é o responsável pela aprovação?
+E-mail do aprovador
+Esta demanda é confidencial? Sim ou não
+Bloco 2: identificação da demanda
+Campos:
+Título da solicitação
+Tipo de demanda
+Cliente, parceiro, projeto ou área relacionada
+Essa demanda está ligada a uma oportunidade comercial? Sim ou não
+Nome do vendedor ou responsável comercial, se houver
+Link do CRM ou pasta, se houver
+Bloco 3: objetivo
+Campos:
+O que precisa ser feito?
+Qual é o objetivo principal?
+Qual problema essa peça precisa resolver?
+Qual ação esperamos que o público tome depois de receber ou ver esse material?
+Existe uma meta ligada a essa demanda? Qual?
+Bloco 4: público-alvo
+Campos:
+Para quem é esse material?
+Perfil do público
+Cargo ou função
+Segmento
+Empresa ou cliente específico
+O público já conhece a VendaMais? Sim, não ou parcialmente
+O público é interno ou externo?
+Bloco 5: conteúdo obrigatório
+Campos:
+Quais informações precisam aparecer obrigatoriamente?
+Existe algum texto base?
+Existe alguma apresentação, proposta, reunião ou conversa de referência?
+Existem links de referência?
+Existem arquivos anexos?
+Existem logos obrigatórios?
+Existe alguma frase, informação ou abordagem que não pode aparecer?
+Bloco 6: formato de entrega
+Campos:
+Onde o material será usado?
+Canal:
+WhatsApp
+E-mail
+LinkedIn
+Instagram
+Site
+Evento
+Reunião comercial
+Apresentação
+Outro
+Formato desejado:
+Texto
+PDF
+PPT
+Imagem
+Vídeo
+HTML
+Link web
+Outro
+Dimensão ou tamanho necessário
+Precisa de versão editável?
+Precisa de versão em espanhol?
+Precisa de versão em inglês?
+Precisa seguir alguma identidade visual específica?
+Bloco 7: prazo
+Campos:
+Data desejada de entrega
+Data real de uso
+O prazo é flexível? Sim ou não
+O que acontece se essa demanda não for entregue nessa data?
+Existe reunião, evento, envio ou apresentação já marcado?
+Horário limite de entrega, se houver
+Bloco 8: prioridade
+Campos:
+Prioridade solicitada:
+Baixa
+Normal
+Alta
+Crítica
+Justificativa da prioridade
+Impacto da demanda:
+Comunicação interna
+Cliente ativo
+Prospecção
+Proposta comercial
+Campanha
+Evento
+Diretoria
+Lançamento
+Outro
+Bloco 9: anexos
+Campos:
+Upload de arquivos
+Link para pasta
+Link para apresentação
+Link para reunião ou transcrição
+Link para CRM
+Link para referências visuais
+Bloco 10: confirmação
+Texto obrigatório antes de enviar:
+Entendo que o envio desta solicitação não garante automaticamente o prazo solicitado. O marketing fará a triagem considerando briefing, prioridade, fila atual e capacidade semanal. Caso faltem informações ou o prazo seja inviável, a demanda poderá ser devolvida ou reprogramada.
+Checkbox obrigatório:
+Li e concordo com as regras de solicitação ao marketing.
+Campos internos da solicitação
+Além dos campos preenchidos pelo solicitante, o sistema deve ter campos internos para o administrador.
+Campos:
+Código da solicitação
+Data de abertura
+Status
+Peso padrão
+Peso ajustado
+Prazo mínimo calculado
+Data mínima possível
+Data desejada
+Data sugerida pelo sistema
+Data aprovada pelo marketing
+Semana de entrega
+Responsável interno
+Prioridade ajustada
+Pontuação de prioridade
+Status de viabilidade
+Motivo da inviabilidade
+Reservar capacidade? Sim ou não
+Confidencial? Sim ou não
+Observações internas
+Histórico de alterações
+Código da solicitação
+Formato sugerido:
+MKT-AAAA-NNNN
+Exemplo:
+MKT-2026-0001
+Cálculo da semana
+O sistema deve considerar semana de segunda a sexta.
+Exemplo:
+Data de entrega: 26/06/2026
+Semana: 22/06/2026 a 26/06/2026
+Regras para dias úteis
+O administrador deve poder configurar:
+Dias úteis padrão: segunda a sexta
+Feriados nacionais
+Feriados locais
+Dias bloqueados
+Períodos de férias
+Semanas com capacidade reduzida
+Regras para briefing completo
+O briefing só deve ser considerado completo se os campos obrigatórios estiverem preenchidos.
+Campos obrigatórios para toda solicitação:
+Nome
+Área
+E-mail
+Tipo de demanda
+Título
+O que precisa ser feito
+Objetivo
+Público-alvo
+Data desejada
+Data real de uso
+Canal de uso
+Formato de entrega
+Prioridade
+Justificativa, quando prioridade for Alta ou Crítica
+Aprovação
+Campos obrigatórios por tipo de demanda:
+Post ou carrossel
+Tema
+Público
+Canal
+Objetivo
+CTA
+Data de publicação desejada
+Referências, se houver
+E-mail marketing
+Público
+Objetivo
+Oferta ou mensagem principal
+CTA
+Link de destino
+Data de disparo
+Base de envio
+Proposta comercial
+Cliente
+Contexto da oportunidade
+Dor principal
+Solução sugerida
+Produtos envolvidos
+Valor, se já existir
+Prazo de envio
+Responsável comercial
+Arquivos de referência
+Folder
+Público
+Objetivo
+Conteúdo obrigatório
+Formato
+Canal de distribuição
+Quantidade de páginas esperada
+Referências visuais
+Campanha ou lançamento
+Objetivo do lançamento
+Produto ou serviço
+Público
+Oferta
+Canais
+Peças necessárias
+Data de início
+Data de fim
+Responsável pela aprovação
+Orçamento, se houver
+Regras de validação do formulário
+O sistema deve impedir envio quando:
+Campos obrigatórios estiverem vazios
+Prioridade Alta ou Crítica não tiver justificativa
+Data desejada for anterior à data atual
+Data real de uso for anterior à data desejada de entrega
+Tipo de demanda exigir anexo e nenhum anexo for enviado
+Checkbox de ciência não for marcado
+O sistema deve permitir envio com alerta quando:
+Prazo solicitado for menor que o prazo mínimo
+Semana estiver acima da capacidade
+Briefing estiver tecnicamente completo, mas com alerta de baixa qualidade
+Solicitação for marcada como crítica
+Mensagens automáticas no formulário
+Quando o prazo for menor que o mínimo
+O prazo solicitado está abaixo do mínimo recomendado para este tipo de demanda. A solicitação poderá ser enviada, mas dependerá de aprovação do marketing e poderá ser reprogramada.
+Quando a semana estiver cheia
+A semana solicitada já está no limite ou acima da capacidade prevista. O sistema irá sugerir uma nova data provável de entrega.
+Quando a demanda for crítica
+Demandas críticas devem ter justificativa clara e impacto real em cliente, receita, evento, diretoria ou lançamento. A prioridade poderá ser ajustada pelo marketing na triagem.
+E-mails automáticos
+1. E-mail para o solicitante após envio
+Assunto:
+Solicitação recebida: [código] - [título]
+Corpo:
+Sua solicitação foi recebida pelo marketing.
+Código: [código]Tipo: [tipo]Data desejada: [data desejada]Data provável calculada: [data sugerida]Status: Recebido
+O prazo solicitado ainda não está confirmado. O marketing fará a triagem considerando briefing, prioridade, fila atual e capacidade semanal.
+2. E-mail para o marketing após nova solicitação
+Assunto:
+Nova solicitação de marketing: [tipo] - [solicitante]
+Corpo:
+Uma nova solicitação foi aberta.
+Código: [código]Solicitante: [nome]Área: [área]Tipo: [tipo]Peso estimado: [peso]Prioridade: [prioridade]Data desejada: [data desejada]Data sugerida pelo sistema: [data sugerida]Status de viabilidade: [viabilidade]
+Acesse o sistema para fazer a triagem.
+3. E-mail de briefing incompleto
+Assunto:
+Solicitação precisa de complemento: [código]
+Corpo:
+Sua solicitação foi analisada, mas ainda faltam informações para entrar na fila de produção.
+Pendências:
+[lista de pendências]
+Assim que as informações forem complementadas, o marketing fará nova triagem.
+4. E-mail de prazo aprovado
+Assunto:
+Prazo aprovado: [código]
+Corpo:
+Sua solicitação foi aprovada para produção.
+Código: [código]Tipo: [tipo]Data aprovada de entrega: [data aprovada]Status: Aprovado para produção
+5. E-mail de prazo reprogramado
+Assunto:
+Nova previsão de entrega: [código]
+Corpo:
+O prazo solicitado não foi viável considerando a fila atual e a capacidade semanal.
+Data solicitada: [data desejada]Nova data prevista: [data aprovada]Motivo: [motivo]
+A solicitação seguirá na fila conforme a nova previsão.
+6. E-mail de entrega
+Assunto:
+Solicitação entregue: [código]
+Corpo:
+A solicitação foi concluída.
+Código: [código]Tipo: [tipo]Data de entrega: [data]Link ou arquivo final: [link]
+Relatórios e indicadores
+O sistema deve gerar relatórios com:
+Total de solicitações por mês
+Solicitações por área
+Solicitações por tipo
+Solicitações por prioridade
+Demandas entregues no prazo
+Demandas entregues fora do prazo
+Demandas devolvidas por briefing incompleto
+Tempo médio de triagem
+Tempo médio de produção
+Peso total produzido por semana
+Capacidade usada por semana
+Capacidade excedida por semana
+Principais solicitantes
+Tipos de demanda mais comuns
+Dashboard principal
+Indicadores sugeridos:
+Solicitações abertas
+Solicitações em produção
+Solicitações aguardando briefing
+Solicitações atrasadas
+Entregas da semana
+Capacidade da semana
+Capacidade já ocupada
+Capacidade disponível
+Próxima semana disponível
+Indicador de capacidade
+Mostrar visualmente:
+0% a 69%: capacidade saudável
+70% a 89%: atenção
+90% a 100%: semana cheia
+Acima de 100%: sobrecarga
+Exemplo visual
+Semana de 24/06 a 28/06
+Capacidade: 20 pontosOcupado: 18 pontosDisponível: 2 pontosUso: 90%
+Status: semana cheia
+Regras para fila
+A fila deve ser ordenada por padrão assim:
+Demandas críticas aprovadas
+Demandas com data real de uso mais próxima
+Demandas com maior pontuação de prioridade
+Demandas mais antigas
+Demandas normais
+Demandas baixas
+O administrador deve poder reorganizar manualmente.
+Regras de urgência
+Uma demanda urgente pode ser aberta, mas o sistema deve deixar claro que urgência não garante entrega.
+Texto sugerido:
+Demandas urgentes serão avaliadas pelo marketing. Caso entrem na frente da fila, outras entregas poderão ser reprogramadas.
+Quando uma demanda crítica for aprovada e ultrapassar a capacidade da semana, o sistema deve mostrar:
+Esta aprovação ultrapassa a capacidade da semana. Deseja manter mesmo assim?
+Opções:
+Aprovar e manter sobrecarga
+Aprovar e reprogramar outra demanda
+Reprogramar esta demanda
+Devolver ao solicitante
+Reprogramação de outras demandas
+Quando uma demanda crítica entrar em uma semana cheia, o administrador deve poder escolher outra demanda para mover.
+O sistema deve registrar:
+Qual demanda foi reprogramada
+Data anterior
+Nova data
+Motivo
+Quem fez a alteração
+Data e horário da alteração
+Banco de dados sugerido
+Tabela users
+Campos:
+id
+name
+email
+phone
+area
+role
+active
+created_at
+updated_at
+Tabela request_types
+Campos:
+id
+name
+default_weight
+default_min_business_days
+description
+requires_attachment
+active
+created_at
+updated_at
+Tabela weekly_capacities
+Campos:
+id
+week_start
+week_end
+capacity_points
+is_blocked
+notes
+created_at
+updated_at
+Tabela requests
+Campos:
+id
+code
+title
+requester_id
+area
+approver_name
+approver_email
+request_type_id
+client_or_project
+is_commercial_opportunity
+commercial_owner
+crm_link
+objective
+problem_to_solve
+expected_action
+target_audience
+audience_profile
+segment
+company
+audience_knows_vendamais
+mandatory_content
+base_text
+reference_links
+forbidden_content
+channel
+output_format
+dimensions
+needs_editable_version
+needs_spanish_version
+needs_english_version
+desired_delivery_date
+real_use_date
+is_deadline_flexible
+consequence_if_late
+priority_requested
+priority_approved
+priority_justification
+impact_type
+status
+default_weight
+adjusted_weight
+min_business_days
+min_possible_date
+system_suggested_date
+approved_delivery_date
+delivery_week_start
+viability_status
+inviability_reason
+reserve_capacity
+confidential
+internal_notes
+final_delivery_link
+delivered_at
+created_at
+updated_at
+Tabela request_files
+Campos:
+id
+request_id
+file_name
+file_url
+file_type
+uploaded_by
+created_at
+Tabela request_comments
+Campos:
+id
+request_id
+user_id
+comment
+is_internal
+created_at
+Tabela status_history
+Campos:
+id
+request_id
+old_status
+new_status
+changed_by
+reason
+created_at
+Tabela effort_allocations
+Campos:
+id
+request_id
+week_start
+week_end
+allocated_points
+notes
+created_at
+updated_at
+Tabela holidays
+Campos:
+id
+date
+name
+type
+created_at
+Tabela email_logs
+Campos:
+id
+request_id
+email_type
+recipient
+subject
+sent_at
+status
+Integrações desejadas
+E-mail
+O sistema deve enviar e-mails automáticos para:
+Solicitante
+Administrador de marketing
+Aprovador, quando necessário
+Pode usar SMTP, Gmail ou outro serviço de envio.
+Google Calendar, opcional
+O sistema pode criar eventos ou blocos no Google Calendar quando uma demanda for aprovada para produção.
+Evento sugerido:
+Título: [MKT-2026-0001] Proposta comercial - cliente XData: data aprovadaDescrição: resumo da demanda, link para o sistema e peso da demanda
+Upload de arquivos
+O sistema deve permitir upload de arquivos ou link para pasta externa.
+Formatos permitidos:
+PDF
+PPT
+PPTX
+DOC
+DOCX
+XLS
+XLSX
+PNG
+JPG
+SVG
+MP4
+ZIP
+Limite configurável por arquivo.
+Regras de permissão
+Solicitante vê apenas suas demandas e a fila geral resumida
+Administrador vê tudo
+Gestor vê relatórios
+Demandas confidenciais só aparecem para administrador e solicitante
+Comentários internos só aparecem para administradores
+MVP da primeira versão
+A primeira versão deve ter:
+Login simples
+Cadastro de solicitação
+Cálculo de peso
+Cálculo de prazo mínimo
+Configuração de capacidade semanal
+Verificação de capacidade
+Sugestão de data provável
+Painel administrativo
+Mudança de status
+Envio de e-mails
+Tela de fila
+Tela de calendário
+Configuração de tipos de demanda
+Configuração de pesos e prazos mínimos
+Segunda versão
+Adicionar:
+Dashboard completo
+Relatórios
+Pontuação de prioridade
+Distribuição de esforço em múltiplas semanas
+Google Calendar
+Histórico avançado
+Reprogramação com impacto em outras demandas
+Comentários internos e externos
+Aprovação por e-mail
+Terceira versão
+Adicionar:
+Integração com CRM
+Integração com Google Drive
+Templates por tipo de demanda
+IA para avaliar qualidade do briefing
+IA para sugerir peso
+IA para sugerir prazo
+IA para resumir demanda para o marketing
+Área de indicadores para diretoria
+Critérios de aceite da primeira versão
+A primeira versão será considerada pronta quando:
+Um solicitante conseguir abrir uma demanda completa
+O sistema calcular peso e prazo mínimo automaticamente
+O sistema verificar capacidade da semana
+O sistema sugerir data provável
+O administrador conseguir aprovar, reprogramar ou devolver a demanda
+O solicitante receber e-mail de confirmação
+O marketing receber e-mail de nova demanda
+A fila mostrar demandas em ordem
+O calendário mostrar demandas por semana
+O administrador conseguir alterar a capacidade semanal
+O administrador conseguir alterar pesos e prazos mínimos
+Prompt para o Claude ou programador
+Criar um sistema web interno chamado Central de solicitações ao marketing da VendaMais.
+O sistema deve funcionar como uma central de briefing, fila e capacidade para todas as demandas de marketing.
+Toda solicitação deve entrar por formulário, gerar uma tarefa, calcular peso, prazo mínimo, capacidade semanal e data provável de entrega.
+O administrador deve conseguir configurar os tipos de demanda, pesos, prazos mínimos e capacidade de cada semana.
+O sistema deve impedir que demandas sejam tratadas como confirmadas antes da triagem do marketing.
+A regra principal é:
+O solicitante informa o prazo desejado
+O sistema calcula o prazo mínimo
+O sistema verifica a capacidade da semana
+O sistema mostra se o prazo é viável ou não
+O marketing confirma, reprograma ou devolve a solicitação
+Criar com as seguintes áreas:
+Login
+Página inicial do solicitante
+Nova solicitação
+Minhas solicitações
+Fila geral resumida
+Painel administrativo
+Calendário de produção
+Configurações de tipos de demanda
+Configurações de capacidade semanal
+Relatórios básicos
+Usar a lógica de pesos e capacidade descrita neste documento.
+Priorizar uma primeira versão funcional, simples e personalizável.

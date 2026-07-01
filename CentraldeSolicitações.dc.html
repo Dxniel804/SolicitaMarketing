@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+input,select,textarea,button{font-family:inherit;font-size:inherit;color:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#cdd2db;border-radius:8px;border:2px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:#aab1bf;background-clip:content-box}
+</style>
+</helmet>
+
+<div style="font-family:'Public Sans',system-ui,sans-serif;color:#1A1D23;height:100vh;width:100%;overflow:hidden;background:#F4F5F7">
+
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+  <div style="height:100vh;display:grid;grid-template-columns:1.05fr 1fr;background:#141A2E">
+    <div style="padding:64px 60px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:radial-gradient(120% 120% at 0% 0%, #1E2740 0%, #141A2E 60%)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <img src="assets/vendamais-logo.png" alt="VendaMais" style="height:34px;width:auto;display:block">
+      </div>
+      <div>
+        <div style="font-family:'Space Grotesk';font-weight:700;font-size:42px;line-height:1.08;letter-spacing:-.5px;max-width:460px">Central de Solicitações ao Marketing</div>
+        <p style="color:#9AA3B8;font-size:16px;line-height:1.6;max-width:420px;margin-top:18px">Um fluxo único para todo pedido de marketing — com briefing estruturado, cálculo automático de prazo e controle de capacidade semanal.</p>
+        <div style="display:flex;gap:26px;margin-top:34px">
+          <div><div style="font-family:'Space Grotesk';font-size:26px;font-weight:700">24</div><div style="color:#8089A0;font-size:12.5px;margin-top:2px">tipos de demanda</div></div>
+          <div style="width:1px;background:#2A334C"></div>
+          <div><div style="font-family:'Space Grotesk';font-size:26px;font-weight:700">11</div><div style="color:#8089A0;font-size:12.5px;margin-top:2px">status de produção</div></div>
+          <div style="width:1px;background:#2A334C"></div>
+          <div><div style="font-family:'Space Grotesk';font-size:26px;font-weight:700">pontos</div><div style="color:#8089A0;font-size:12.5px;margin-top:2px">capacidade semanal</div></div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#646e88">Sistema interno · acesso restrito à equipe VendaMais</div>
+    </div>
+    <div style="background:#F4F5F7;display:flex;align-items:center;justify-content:center;padding:40px">
+      <div style="width:100%;max-width:392px">
+        <div style="font-family:'Space Grotesk';font-weight:600;font-size:22px">Entrar</div>
+        <p style="color:#5B6472;font-size:14px;margin-top:6px;margin-bottom:20px">Escolha como deseja acessar a central.</p>
+
+        <div style="display:flex;gap:5px;background:#E9EBEF;padding:4px;border-radius:11px;margin-bottom:22px">
+          <button onClick="{{ h.modeSol }}" style="{{ login.tabSolStyle }}">Sou solicitante</button>
+          <button onClick="{{ h.modeEq }}" style="{{ login.tabEqStyle }}">Equipe de marketing</button>
+        </div>
+
+        <sc-if value="{{ login.isSol }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="font-size:12.5px;color:#5B6472;background:#EEF1FB;border:1px solid #DCE3F7;border-radius:9px;padding:10px 12px;margin-bottom:16px;line-height:1.45">Sem senha. Faça um cadastro rápido com seu e-mail — você verá <strong>apenas as suas próprias solicitações</strong>.</div>
+          <label style="{{ lblS }}">Nome completo *</label>
+          <input value="{{ login.name }}" onInput="{{ h.loginName }}" placeholder="Seu nome" style="{{ inS }}">
+          <label style="{{ lblS }}">E-mail *</label>
+          <input value="{{ login.email }}" onInput="{{ h.loginEmail }}" placeholder="voce@vendamais.com.br" style="{{ inS }}">
+          <label style="{{ lblS }}">Área *</label>
+          <input value="{{ login.area }}" onInput="{{ h.loginArea }}" placeholder="Ex: Comercial, Vendas, RH" style="{{ inS }}">
+          <sc-if value="{{ login.hasError }}" hint-placeholder-val="{{ false }}"><div style="color:#B23B33;font-size:12.5px;margin-top:11px;font-weight:600">{{ login.error }}</div></sc-if>
+          <button onClick="{{ h.doSolicitante }}" style="width:100%;margin-top:18px;padding:12px;background:#1F2740;color:#fff;border:none;border-radius:9px;font-weight:600;font-size:14.5px;cursor:pointer" style-hover="background:#2A3354">{{ login.solCta }}</button>
+          <sc-if value="{{ login.hasKnown }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px">
+            <div style="font-size:11px;font-weight:700;color:#9097A3;letter-spacing:.3px;margin-bottom:8px">JÁ CADASTRADOS</div>
+            <div style="display:flex;flex-wrap:wrap;gap:7px">
+              <sc-for list="{{ login.known }}" as="k" hint-placeholder-count="3"><button onClick="{{ k.onClick }}" style="background:#fff;border:1px solid #DCE0E7;border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;font-weight:500" style-hover="border-color:#1F2740">{{ k.label }}</button></sc-for>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ login.isEq }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size:12.5px;color:#5B6472;background:#FBF4E4;border:1px solid #F0E2BE;border-radius:9px;padding:10px 12px;margin-bottom:16px;line-height:1.45">Acesso restrito. Administrador e diretoria entram com <strong>e-mail e senha</strong> para gerir e editar as demandas.</div>
+          <label style="{{ lblS }}">E-mail corporativo</label>
+          <input value="{{ login.email }}" onInput="{{ h.loginEmail }}" placeholder="seu.email@vendamais.com.br" style="{{ inS }}">
+          <label style="{{ lblS }}">Senha</label>
+          <input type="password" value="{{ login.password }}" onInput="{{ h.loginPassword }}" placeholder="••••••••" style="{{ inS }}">
+          <sc-if value="{{ login.hasError }}" hint-placeholder-val="{{ false }}"><div style="color:#B23B33;font-size:12.5px;margin-top:11px;font-weight:600">{{ login.error }}</div></sc-if>
+          <button onClick="{{ h.doEquipe }}" style="width:100%;margin-top:18px;padding:12px;background:#1F2740;color:#fff;border:none;border-radius:9px;font-weight:600;font-size:14.5px;cursor:pointer" style-hover="background:#2A3354">Acessar o sistema →</button>
+          <div style="margin-top:16px;background:#F2F3F6;border-radius:9px;padding:11px 13px">
+            <div style="font-size:11px;font-weight:700;color:#9097A3;letter-spacing:.3px;margin-bottom:7px">CREDENCIAIS DE DEMONSTRAÇÃO</div>
+            <div style="font-size:12px;color:#5B6472;line-height:1.7">Administrador — <strong>admin@vendamais.com.br</strong> / senha <strong>marketing</strong><br>Gestor/Diretoria — <strong>diretoria@vendamais.com.br</strong> / senha <strong>diretoria</strong></div>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+  <div style="display:grid;grid-template-columns:236px 1fr;height:100vh">
+
+    <!-- SIDEBAR -->
+    <aside style="background:#141A2E;color:#C4CBDD;display:flex;flex-direction:column;height:100vh;overflow:hidden">
+      <div style="padding:20px 18px 16px;display:flex;flex-direction:column;gap:9px;border-bottom:1px solid #232B42">
+        <img src="assets/vendamais-logo.png" alt="VendaMais" style="height:26px;width:auto;align-self:flex-start;display:block">
+        <div style="font-family:'Space Grotesk';font-weight:600;color:#8089A0;font-size:11px;letter-spacing:.4px;text-transform:uppercase">Central de Solicitações</div>
+      </div>
+      <nav style="flex:1;overflow-y:auto;padding:16px 12px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.7px;color:#5B647F;padding:0 8px 9px">MENU</div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <sc-for list="{{ navMain }}" as="n" hint-placeholder-count="5">
+            <button onClick="{{ n.onClick }}" style="{{ n.style }}">
+              <span style="width:7px;height:7px;border-radius:50%;background:{{ n.dot }};flex:none"></span>
+              <span>{{ n.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ showConfig }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.7px;color:#5B647F;padding:18px 8px 9px">CONFIGURAÇÕES</div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <sc-for list="{{ navConfig }}" as="n" hint-placeholder-count="3">
+            <button onClick="{{ n.onClick }}" style="{{ n.style }}">
+              <span style="width:7px;height:7px;border-radius:50%;background:{{ n.dot }};flex:none"></span>
+              <span>{{ n.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+        </sc-if>
+      </nav>
+      <div style="padding:14px 14px 16px;border-top:1px solid #232B42">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px">
+          <div style="width:32px;height:32px;border-radius:50%;background:#2A3354;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">{{ user.initial }}</div>
+          <div style="line-height:1.2;min-width:0">
+            <div style="font-size:12.5px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ user.name }}</div>
+            <div style="font-size:10.5px;color:#7F88A1">{{ user.roleLabel }}</div>
+          </div>
+        </div>
+        <button onClick="{{ h.logout }}" style="width:100%;padding:8px;background:transparent;border:1px solid #2E3854;color:#9AA3B8;border-radius:8px;font-size:12px;cursor:pointer" style-hover="border-color:#41496B;color:#C4CBDD">Sair / trocar perfil</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main style="height:100vh;overflow-y:auto;overflow-x:hidden;background:#F4F5F7;position:relative;min-width:0">
+      <header style="position:sticky;top:0;z-index:20;background:rgba(244,245,247,.86);backdrop-filter:blur(8px);border-bottom:1px solid #E6E8EC;padding:15px 30px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-family:'Space Grotesk';font-weight:600;font-size:18.5px;letter-spacing:-.2px">{{ screenTitle }}</div>
+          <div style="font-size:12.5px;color:#6B7280;margin-top:1px">{{ screenSub }}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #E6E8EC;border-radius:10px;padding:7px 13px">
+            <span style="font-size:11px;color:#6B7280;font-weight:600">Semana atual</span>
+            <span style="width:1px;height:14px;background:#E6E8EC"></span>
+            <span style="font-size:12.5px;font-weight:600">{{ curWeek.usedLabel }}</span>
+            <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;background:{{ curWeek.chipBg }};color:{{ curWeek.chipFg }}">{{ curWeek.pctLabel }}</span>
+          </div>
+          <sc-if value="{{ isSolicitante }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ h.goNew }}" style="background:#1F2740;color:#fff;border:none;padding:9px 16px;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer" style-hover="background:#2A3354">+ Nova solicitação</button>
+          </sc-if>
+        </div>
+      </header>
+
+      <div style="padding:26px 30px 60px">
+
+        <!-- ============ HOME (solicitante) ============ -->
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1080px">
+          <div style="background:radial-gradient(130% 130% at 100% 0%, #1E2740 0%, #141A2E 70%);border-radius:16px;padding:30px 32px;color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:24px">
+            <div style="max-width:560px">
+              <div style="font-family:'Space Grotesk';font-weight:700;font-size:26px;letter-spacing:-.3px">Olá, {{ user.firstName }} 👋</div>
+              <p style="color:#A6AEC4;font-size:14.5px;line-height:1.6;margin-top:10px">Toda demanda de marketing passa por aqui. Abrir uma solicitação não garante automaticamente o prazo — o marketing faz a triagem considerando briefing, prioridade, fila e capacidade da semana.</p>
+              <button onClick="{{ h.goNew }}" style="margin-top:18px;background:#E84C3D;color:#fff;border:none;padding:12px 22px;border-radius:10px;font-weight:600;font-size:14.5px;cursor:pointer" style-hover="background:#d8412f">+ Abrir nova solicitação</button>
+            </div>
+            <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px 18px;min-width:180px">
+              <div style="font-size:11.5px;color:#9AA3B8;font-weight:600">Capacidade desta semana</div>
+              <div style="font-family:'Space Grotesk';font-size:30px;font-weight:700;margin-top:4px">{{ curWeek.available }} <span style="font-size:14px;color:#9AA3B8;font-weight:500">pts livres</span></div>
+              <div style="height:7px;border-radius:6px;background:rgba(255,255,255,.12);margin-top:10px;overflow:hidden"><div style="height:100%;width:{{ curWeek.pctLabel }};background:{{ curWeek.barColor }}"></div></div>
+              <div style="font-size:11px;color:#8089A0;margin-top:7px">{{ curWeek.usedLabel }} · {{ curWeek.weekRange }}</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:flex-start;gap:11px;background:#FBF4E4;border:1px solid #F0E2BE;border-radius:12px;padding:15px 17px;margin-top:18px">
+            <span style="font-size:16px;line-height:1.3">⚠️</span>
+            <div style="font-size:13px;color:#7A5B12;line-height:1.55">Antes de abrir uma solicitação, verifique se todas as informações estão completas. <strong>Pedidos sem briefing suficiente poderão ser devolvidos pelo marketing e não entrarão na fila de produção.</strong> <a href="#" onClick="{{ h.noop }}" style="color:#9A6B12;font-weight:600">Ver política de solicitações →</a></div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:26px 0 14px">
+            <div style="font-family:'Space Grotesk';font-weight:600;font-size:16px">Minhas solicitações abertas</div>
+            <button onClick="{{ h.goMine }}" style="background:none;border:none;color:#3B5BDB;font-weight:600;font-size:13px;cursor:pointer">Ver todas →</button>
+          </div>
+          <sc-if value="{{ hasMine }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:13px">
+            <sc-for list="{{ homeCards }}" as="c" hint-placeholder-count="4">
+              <div onClick="{{ c.onOpen }}" style="background:#fff;border:1px solid #E6E8EC;border-radius:13px;padding:16px 18px;cursor:pointer" style-hover="border-color:#C9D0DC;box-shadow:0 4px 14px rgba(20,26,46,.05)">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                  <span style="font-size:11.5px;font-weight:700;color:#8A93A3;font-family:'Space Grotesk'">{{ c.code }}</span>
+                  <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ c.stBg }};color:{{ c.stFg }}">{{ c.status }}</span>
+                </div>
+                <div style="font-weight:600;font-size:14.5px;margin-top:8px;line-height:1.35">{{ c.title }}</div>
+                <div style="font-size:12.5px;color:#6B7280;margin-top:3px">{{ c.typeName }}</div>
+                <div style="display:flex;gap:18px;margin-top:13px;padding-top:12px;border-top:1px solid #F0F1F4">
+                  <div><div style="font-size:10.5px;color:#9097A3">Prazo previsto</div><div style="font-size:13px;font-weight:600;margin-top:1px">{{ c.prazo }}</div></div>
+                  <div><div style="font-size:10.5px;color:#9097A3">Viabilidade</div><div style="font-size:13px;font-weight:600;margin-top:1px;color:{{ c.viaFg }}">{{ c.viaLabel }}</div></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          </sc-if>
+          <sc-if value="{{ noMine }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;border:1px dashed #D5DAE2;border-radius:13px;padding:38px;text-align:center;color:#6B7280;font-size:14px">Você ainda não abriu nenhuma solicitação. Clique em <strong>Abrir nova solicitação</strong> para começar.</div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <!-- ============ NEW REQUEST ============ -->
+        <sc-if value="{{ isNew }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:24px;align-items:start;max-width:1180px">
+          <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+              <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-bottom:3px">1 · Dados do solicitante</div>
+              <div style="font-size:12.5px;color:#8A93A3;margin-bottom:16px">Quem está pedindo e quem aprova.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div><label style="{{ lblS }}">Nome *</label><input value="{{ d.nome }}" onInput="{{ h.f_nome }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">Área *</label><input value="{{ d.area }}" onInput="{{ h.f_area }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">E-mail *</label><input value="{{ d.email }}" onInput="{{ h.f_email }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">WhatsApp</label><input value="{{ d.whatsapp }}" onInput="{{ h.f_whatsapp }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">Responsável pela aprovação *</label><input value="{{ d.aprovador }}" onInput="{{ h.f_aprovador }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">E-mail do aprovador</label><input value="{{ d.emailAprovador }}" onInput="{{ h.f_emailAprovador }}" style="{{ inS }}"></div>
+              </div>
+              <label style="display:flex;align-items:center;gap:9px;margin-top:14px;font-size:13px;cursor:pointer"><input type="checkbox" checked="{{ d.confidencial }}" onChange="{{ h.f_confidencial }}" style="width:16px;height:16px;accent-color:#1F2740"> Esta demanda é confidencial</label>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+              <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-bottom:3px">2 · Identificação da demanda</div>
+              <div style="font-size:12.5px;color:#8A93A3;margin-bottom:16px">O tipo de demanda define o peso e o prazo mínimo automaticamente.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div style="grid-column:1 / -1"><label style="{{ lblS }}">Título da solicitação *</label><input value="{{ d.titulo }}" onInput="{{ h.f_titulo }}" placeholder="Ex: Folder institucional para feira" style="{{ inS }}"></div>
+                <div style="grid-column:1 / -1"><label style="{{ lblS }}">Tipo de demanda *</label>
+                  <select value="{{ d.tipoId }}" onChange="{{ h.f_tipoId }}" style="{{ inS }}">
+                    <option value="">Selecione o tipo…</option>
+                    <sc-for list="{{ typeOptions }}" as="t" hint-placeholder-count="6"><option value="{{ t.id }}">{{ t.label }}</option></sc-for>
+                  </select>
+                </div>
+                <div><label style="{{ lblS }}">Cliente / projeto / área relacionada</label><input value="{{ d.clienteProjeto }}" onInput="{{ h.f_clienteProjeto }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">Responsável comercial (se houver)</label><input value="{{ d.comercial }}" onInput="{{ h.f_comercial }}" style="{{ inS }}"></div>
+              </div>
+              <label style="display:flex;align-items:center;gap:9px;margin-top:14px;font-size:13px;cursor:pointer"><input type="checkbox" checked="{{ d.oportunidade }}" onChange="{{ h.f_oportunidade }}" style="width:16px;height:16px;accent-color:#1F2740"> Ligada a uma oportunidade comercial</label>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+              <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-bottom:3px">3 · Briefing</div>
+              <div style="font-size:12.5px;color:#8A93A3;margin-bottom:16px">Quanto mais completo, mais rápida a triagem.</div>
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div><label style="{{ lblS }}">O que precisa ser feito? *</label><textarea value="{{ d.oQue }}" onInput="{{ h.f_oQue }}" rows="2" style="{{ taS }}"></textarea></div>
+                <div><label style="{{ lblS }}">Qual é o objetivo principal? *</label><textarea value="{{ d.objetivo }}" onInput="{{ h.f_objetivo }}" rows="2" style="{{ taS }}"></textarea></div>
+                <div><label style="{{ lblS }}">Para quem é esse material? (público-alvo) *</label><textarea value="{{ d.publico }}" onInput="{{ h.f_publico }}" rows="2" style="{{ taS }}"></textarea></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                  <div><label style="{{ lblS }}">Canal de uso *</label>
+                    <select value="{{ d.canal }}" onChange="{{ h.f_canal }}" style="{{ inS }}">
+                      <option value="">Selecione…</option><option>WhatsApp</option><option>E-mail</option><option>LinkedIn</option><option>Instagram</option><option>Site</option><option>Evento</option><option>Reunião comercial</option><option>Apresentação</option><option>Outro</option>
+                    </select>
+                  </div>
+                  <div><label style="{{ lblS }}">Formato de entrega *</label>
+                    <select value="{{ d.formato }}" onChange="{{ h.f_formato }}" style="{{ inS }}">
+                      <option value="">Selecione…</option><option>Texto</option><option>PDF</option><option>PPT</option><option>Imagem</option><option>Vídeo</option><option>HTML</option><option>Link web</option><option>Outro</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+              <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-bottom:3px">4 · Prazo e prioridade</div>
+              <div style="font-size:12.5px;color:#8A93A3;margin-bottom:16px">O sistema calcula a viabilidade em tempo real (painel ao lado).</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div><label style="{{ lblS }}">Data desejada de entrega *</label><input type="date" value="{{ d.dataDesejada }}" onInput="{{ h.f_dataDesejada }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">Data real de uso *</label><input type="date" value="{{ d.dataUso }}" onInput="{{ h.f_dataUso }}" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">Prioridade *</label>
+                  <select value="{{ d.prioridade }}" onChange="{{ h.f_prioridade }}" style="{{ inS }}"><option>Baixa</option><option>Normal</option><option>Alta</option><option>Crítica</option></select>
+                </div>
+                <div><label style="{{ lblS }}">Impacto da demanda</label>
+                  <select value="{{ d.impacto }}" onChange="{{ h.f_impacto }}" style="{{ inS }}"><option value="">—</option><option>Comunicação interna</option><option>Cliente ativo</option><option>Prospecção</option><option>Proposta comercial</option><option>Campanha</option><option>Evento</option><option>Diretoria</option><option>Lançamento</option><option>Outro</option></select>
+                </div>
+                <div style="grid-column:1 / -1"><label style="{{ lblS }}">Justificativa da prioridade {{ justReq }}</label><textarea value="{{ d.justificativa }}" onInput="{{ h.f_justificativa }}" rows="2" placeholder="Obrigatória para prioridade Alta ou Crítica" style="{{ taS }}"></textarea></div>
+              </div>
+              <label style="display:flex;align-items:center;gap:9px;margin-top:14px;font-size:13px;cursor:pointer"><input type="checkbox" checked="{{ d.flexivel }}" onChange="{{ h.f_flexivel }}" style="width:16px;height:16px;accent-color:#1F2740"> O prazo é flexível</label>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+              <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-bottom:3px">5 · Anexos e confirmação</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+                <div><label style="{{ lblS }}">Nome do anexo / referência</label><input value="{{ d.anexoNome }}" onInput="{{ h.f_anexoNome }}" placeholder="Ex: briefing.pdf" style="{{ inS }}"></div>
+                <div><label style="{{ lblS }}">Link para pasta / arquivo</label><input value="{{ d.anexoLink }}" onInput="{{ h.f_anexoLink }}" placeholder="https://…" style="{{ inS }}"></div>
+              </div>
+              <sc-if value="{{ attachRequired }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:#B5611C;margin-top:8px;font-weight:600">⚠ Este tipo de demanda exige um anexo ou link de referência.</div></sc-if>
+              <label style="display:flex;align-items:flex-start;gap:10px;margin-top:18px;font-size:12.5px;color:#3a4150;cursor:pointer;line-height:1.5;background:#F7F8FA;padding:13px 14px;border-radius:10px">
+                <input type="checkbox" checked="{{ d.ciente }}" onChange="{{ h.f_ciente }}" style="width:17px;height:17px;accent-color:#1F2740;margin-top:1px;flex:none">
+                <span>Entendo que o envio desta solicitação <strong>não garante automaticamente o prazo solicitado</strong>. O marketing fará a triagem considerando briefing, prioridade, fila atual e capacidade semanal. Li e concordo com as regras de solicitação ao marketing.</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- LIVE VIABILITY PANEL -->
+          <div style="position:sticky;top:90px;display:flex;flex-direction:column;gap:14px">
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;overflow:hidden">
+              <div style="padding:15px 18px;background:{{ live.headBg }};border-bottom:1px solid #E6E8EC">
+                <div style="font-size:11.5px;font-weight:700;letter-spacing:.4px;color:{{ live.viaFg }}">VIABILIDADE ESTIMADA</div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:6px">
+                  <span style="width:11px;height:11px;border-radius:50%;background:{{ live.dot }}"></span>
+                  <span style="font-family:'Space Grotesk';font-weight:700;font-size:19px;color:{{ live.viaFg }}">{{ live.viaLabel }}</span>
+                </div>
+              </div>
+              <div style="padding:16px 18px">
+                <div style="font-size:12.5px;color:#5B6472;line-height:1.55">{{ live.msg }}</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:16px">
+                  <div style="background:#F7F8FA;border-radius:10px;padding:11px 13px"><div style="font-size:10.5px;color:#9097A3;font-weight:600">PESO</div><div style="font-family:'Space Grotesk';font-size:21px;font-weight:700;margin-top:2px">{{ live.peso }}</div></div>
+                  <div style="background:#F7F8FA;border-radius:10px;padding:11px 13px"><div style="font-size:10.5px;color:#9097A3;font-weight:600">PRAZO MÍN.</div><div style="font-family:'Space Grotesk';font-size:21px;font-weight:700;margin-top:2px">{{ live.minDays }}<span style="font-size:11px;font-weight:500;color:#9097A3"> d.úteis</span></div></div>
+                </div>
+                <div style="margin-top:13px;display:flex;flex-direction:column;gap:9px">
+                  <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="color:#6B7280">Data mínima possível</span><span style="font-weight:600">{{ live.minDate }}</span></div>
+                  <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="color:#6B7280">Data desejada</span><span style="font-weight:600">{{ live.desired }}</span></div>
+                  <div style="display:flex;justify-content:space-between;font-size:12.5px;padding-top:9px;border-top:1px solid #F0F1F4"><span style="color:#6B7280">Data provável (sistema)</span><span style="font-weight:700;color:#1F2740">{{ live.suggested }}</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:16px 18px">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#8A93A3">CAPACIDADE DA SEMANA SOLICITADA</div>
+              <div style="font-size:12px;color:#9097A3;margin-top:2px">{{ live.weekRange }}</div>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-top:12px">
+                <span style="font-family:'Space Grotesk';font-size:24px;font-weight:700;color:{{ live.capFg }}">{{ live.weekUsePct }}</span>
+                <span style="font-size:12px;color:#6B7280;font-weight:600">{{ live.weekUsed }} / {{ live.weekCap }} pts</span>
+              </div>
+              <div style="height:9px;border-radius:6px;background:#EDEFF2;margin-top:9px;overflow:hidden"><div style="height:100%;width:{{ live.weekUsePct }};background:{{ live.capBar }};transition:width .25s"></div></div>
+              <div style="font-size:12px;color:#6B7280;margin-top:9px">Disponível: <strong style="color:#1F2740">{{ live.weekAvail }} pts</strong> · esta demanda exige <strong style="color:#1F2740">{{ live.peso }} pts</strong></div>
+            </div>
+
+            <sc-if value="{{ live.hasErrors }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FCEDEB;border:1px solid #F3CFC9;border-radius:14px;padding:14px 16px">
+              <div style="font-size:12px;font-weight:700;color:#B23B33;margin-bottom:7px">Pendências para envio</div>
+              <ul style="margin:0;padding-left:17px;color:#9C4339;font-size:12px;line-height:1.7">
+                <sc-for list="{{ live.errors }}" as="e" hint-placeholder-count="2"><li>{{ e }}</li></sc-for>
+              </ul>
+            </div>
+            </sc-if>
+            <sc-if value="{{ live.hasAlerts }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FBF4E4;border:1px solid #F0E2BE;border-radius:14px;padding:14px 16px">
+              <div style="font-size:12px;font-weight:700;color:#9A6B12;margin-bottom:7px">Avisos (envio permitido)</div>
+              <ul style="margin:0;padding-left:17px;color:#7A5B12;font-size:12px;line-height:1.7">
+                <sc-for list="{{ live.alerts }}" as="a" hint-placeholder-count="1"><li>{{ a }}</li></sc-for>
+              </ul>
+            </div>
+            </sc-if>
+
+            <button onClick="{{ h.submit }}" style="{{ submitStyle }}">{{ submitLabel }}</button>
+            <button onClick="{{ h.goHome }}" style="background:transparent;border:1px solid #DCE0E7;color:#5B6472;padding:11px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer">Cancelar</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ MINHAS / TODAS SOLICITAÇÕES ============ -->
+        <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;overflow:hidden">
+          <div style="display:flex;gap:6px;padding:13px 16px;border-bottom:1px solid #EEF0F3;overflow-x:auto">
+            <sc-for list="{{ listFilters }}" as="f" hint-placeholder-count="4"><button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button></sc-for>
+          </div>
+          <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;min-width:880px">
+            <thead><tr style="background:#FAFBFC">
+              <sc-for list="{{ listCols }}" as="c" hint-placeholder-count="7"><th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;letter-spacing:.3px;padding:11px 16px;white-space:nowrap;border-bottom:1px solid #EEF0F3">{{ c }}</th></sc-for>
+            </tr></thead>
+            <tbody>
+              <sc-for list="{{ listRows }}" as="r" hint-placeholder-count="6">
+              <tr onClick="{{ r.onOpen }}" style="cursor:pointer;border-bottom:1px solid #F2F3F6" style-hover="background:#FAFBFD">
+                <td style="padding:13px 16px;font-family:'Space Grotesk';font-weight:600;font-size:12.5px;color:#3a4150;white-space:nowrap">{{ r.code }}</td>
+                <td style="padding:13px 16px;font-size:13.5px;font-weight:600;max-width:230px">{{ r.title }}<div style="font-size:11.5px;color:#9097A3;font-weight:400;margin-top:1px">{{ r.typeName }}</div></td>
+                <td style="padding:13px 16px"><span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ r.stBg }};color:{{ r.stFg }};white-space:nowrap">{{ r.status }}</span></td>
+                <td style="padding:13px 16px"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px"><span style="width:8px;height:8px;border-radius:50%;background:{{ r.viaDot }}"></span>{{ r.viaLabel }}</span></td>
+                <td style="padding:13px 16px;font-size:12.5px;white-space:nowrap">{{ r.desired }}</td>
+                <td style="padding:13px 16px;font-size:12.5px;font-weight:600;white-space:nowrap">{{ r.prazo }}</td>
+                <td style="padding:13px 16px;font-size:12.5px;color:#9097A3;white-space:nowrap">{{ r.updated }}</td>
+              </tr>
+              </sc-for>
+            </tbody>
+          </table>
+          </div>
+          <sc-if value="{{ listEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;color:#9097A3;font-size:13.5px">Nenhuma solicitação neste filtro.</div></sc-if>
+        </div>
+        </sc-if>
+
+        <!-- ============ FILA GERAL ============ -->
+        <sc-if value="{{ isQueue }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1080px">
+          <div style="font-size:13px;color:#6B7280;background:#fff;border:1px solid #E6E8EC;border-radius:12px;padding:13px 16px;margin-bottom:16px;line-height:1.5">Visão resumida da fila de produção. Demandas confidenciais e detalhes estratégicos (valor comercial, cliente, briefing, anexos) não aparecem aqui. A ordem segue prioridade, data de uso e antiguidade.</div>
+          <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;overflow:hidden">
+            <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;min-width:720px">
+              <thead><tr style="background:#FAFBFC">
+                <th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">#</th>
+                <th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">TIPO DE DEMANDA</th>
+                <th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">ÁREA</th>
+                <th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">STATUS</th>
+                <th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">SEMANA PREVISTA</th>
+                <th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">PRAZO PREVISTO</th>
+                <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">PESO</th></sc-if>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ queueRows }}" as="q" hint-placeholder-count="6">
+                <tr onClick="{{ q.onOpen }}" style="cursor:pointer;border-bottom:1px solid #F2F3F6" style-hover="background:#FAFBFD">
+                  <td style="padding:13px 16px;font-family:'Space Grotesk';font-weight:700;color:#C2C7D1;font-size:13px">{{ q.ordem }}</td>
+                  <td style="padding:13px 16px;font-size:13.5px;font-weight:600">{{ q.typeName }} <span style="font-size:11px;font-weight:600;color:{{ q.prioFg }};margin-left:4px">{{ q.prioTag }}</span></td>
+                  <td style="padding:13px 16px;font-size:13px;color:#5B6472">{{ q.area }}</td>
+                  <td style="padding:13px 16px"><span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ q.stBg }};color:{{ q.stFg }};white-space:nowrap">{{ q.status }}</span></td>
+                  <td style="padding:13px 16px;font-size:12.5px;white-space:nowrap">{{ q.week }}</td>
+                  <td style="padding:13px 16px;font-size:12.5px;font-weight:600;white-space:nowrap">{{ q.prazo }}</td>
+                  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}"><td style="padding:13px 16px;font-family:'Space Grotesk';font-weight:700;font-size:13px">{{ q.peso }}</td></sc-if>
+                </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ DASHBOARD (admin) ============ -->
+        <sc-if value="{{ isDash }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:13px">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid #E6E8EC;border-radius:13px;padding:16px 18px">
+                <div style="font-size:11.5px;color:#8A93A3;font-weight:600">{{ k.label }}</div>
+                <div style="font-family:'Space Grotesk';font-size:28px;font-weight:700;margin-top:6px;color:{{ k.color }}">{{ k.value }}</div>
+                <div style="font-size:11.5px;color:#9097A3;margin-top:2px">{{ k.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-top:18px">
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:20px 22px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px">Capacidade por semana</div>
+                <button onClick="{{ h.goCal }}" style="background:none;border:none;color:#3B5BDB;font-weight:600;font-size:12.5px;cursor:pointer">Ver calendário →</button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <sc-for list="{{ weekBars }}" as="w" hint-placeholder-count="5">
+                  <div>
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span style="font-weight:600">{{ w.range }} <span style="color:#9097A3;font-weight:400">{{ w.note }}</span></span><span style="color:#6B7280">{{ w.used }} / {{ w.cap }} pts · <strong style="color:{{ w.fg }}">{{ w.pct }}</strong></span></div>
+                    <div style="height:10px;border-radius:6px;background:#EDEFF2;overflow:hidden"><div style="height:100%;width:{{ w.barW }};background:{{ w.bar }}"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:20px 22px">
+              <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-bottom:14px">Distribuição por status</div>
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <sc-for list="{{ statusDist }}" as="s" hint-placeholder-count="6">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="width:9px;height:9px;border-radius:50%;background:{{ s.fg }};flex:none"></span>
+                    <span style="font-size:12.5px;flex:1">{{ s.label }}</span>
+                    <span style="font-family:'Space Grotesk';font-weight:700;font-size:13.5px">{{ s.count }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:20px 22px;margin-top:18px">
+            <div style="font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-bottom:14px">Próximas entregas</div>
+            <sc-if value="{{ hasUpcoming }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ upcoming }}" as="u" hint-placeholder-count="4">
+                <div onClick="{{ u.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:11px 8px;border-bottom:1px solid #F2F3F6;cursor:pointer;border-radius:8px" style-hover="background:#FAFBFD">
+                  <div style="font-family:'Space Grotesk';font-weight:600;font-size:12px;color:#8A93A3;width:78px;flex:none">{{ u.code }}</div>
+                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ u.title }}</div><div style="font-size:11.5px;color:#9097A3">{{ u.area }} · peso {{ u.peso }}</div></div>
+                  <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:{{ u.stBg }};color:{{ u.stFg }};flex:none">{{ u.status }}</span>
+                  <div style="font-size:12.5px;font-weight:600;width:64px;text-align:right;flex:none">{{ u.date }}</div>
+                </div>
+              </sc-for>
+            </div>
+            </sc-if>
+            <sc-if value="{{ noUpcoming }}" hint-placeholder-val="{{ false }}"><div style="color:#9097A3;font-size:13px;padding:8px 0">Sem entregas previstas.</div></sc-if>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ CALENDÁRIO ============ -->
+        <sc-if value="{{ isCal }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <button onClick="{{ h.calPrev }}" style="width:34px;height:34px;border:1px solid #DCE0E7;background:#fff;border-radius:9px;cursor:pointer;font-size:16px">‹</button>
+              <div style="font-family:'Space Grotesk';font-weight:600;font-size:17px;min-width:170px;text-align:center">{{ calMonthLabel }}</div>
+              <button onClick="{{ h.calNext }}" style="width:34px;height:34px;border:1px solid #DCE0E7;background:#fff;border-radius:9px;cursor:pointer;font-size:16px">›</button>
+            </div>
+            <div style="display:flex;gap:14px;font-size:11.5px;color:#6B7280">
+              <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#28A468"></span>saudável</span>
+              <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#E0A52E"></span>atenção</span>
+              <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#E07B2E"></span>cheia</span>
+              <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:2px;background:#D14B41"></span>sobrecarga</span>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr) 150px;background:#FAFBFC;border-bottom:1px solid #EEF0F3">
+              <sc-for list="{{ calDayHeads }}" as="dh" hint-placeholder-count="5"><div style="padding:10px 14px;font-size:11px;font-weight:700;color:#8A93A3;letter-spacing:.3px">{{ dh }}</div></sc-for>
+              <div style="padding:10px 14px;font-size:11px;font-weight:700;color:#8A93A3;letter-spacing:.3px;border-left:1px solid #EEF0F3">CAPACIDADE</div>
+            </div>
+            <sc-for list="{{ calWeeks }}" as="w" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr) 150px;border-bottom:1px solid #F2F3F6;min-height:104px">
+              <sc-for list="{{ w.days }}" as="day" hint-placeholder-count="5">
+                <div style="{{ day.cellStyle }}">
+                  <div style="font-size:12px;font-weight:600;color:{{ day.numColor }};margin-bottom:5px">{{ day.num }}</div>
+                  <div style="display:flex;flex-direction:column;gap:3px">
+                    <sc-for list="{{ day.items }}" as="it" hint-placeholder-count="1">
+                      <div onClick="{{ it.onOpen }}" title="{{ it.title }}" style="font-size:10.5px;padding:2px 6px;border-radius:5px;background:{{ it.bg }};color:{{ it.fg }};cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600">{{ it.label }}</div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="padding:11px 14px;border-left:1px solid #F2F3F6;display:flex;flex-direction:column;justify-content:center">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Space Grotesk';font-weight:700;font-size:16px;color:{{ w.fg }}">{{ w.pct }}</span><span style="font-size:11px;color:#9097A3">{{ w.used }}/{{ w.cap }}</span></div>
+                <div style="height:7px;border-radius:5px;background:#EDEFF2;margin-top:6px;overflow:hidden"><div style="height:100%;width:{{ w.barW }};background:{{ w.bar }}"></div></div>
+                <div style="font-size:10.5px;color:{{ w.fg }};font-weight:600;margin-top:5px">{{ w.tag }}</div>
+              </div>
+            </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ CONFIG TIPOS ============ -->
+        <sc-if value="{{ isTypes }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1000px">
+          <div style="font-size:13px;color:#6B7280;background:#fff;border:1px solid #E6E8EC;border-radius:12px;padding:13px 16px;margin-bottom:16px;line-height:1.5">Configure os tipos de demanda, o <strong>peso padrão</strong> (esforço relativo) e o <strong>prazo mínimo</strong> em dias úteis. Esses valores alimentam o cálculo de viabilidade e capacidade.</div>
+          <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;overflow:hidden">
+            <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;min-width:680px">
+              <thead><tr style="background:#FAFBFC">
+                <th style="text-align:left;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 16px;border-bottom:1px solid #EEF0F3">TIPO DE DEMANDA</th>
+                <th style="text-align:center;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 12px;border-bottom:1px solid #EEF0F3;width:100px">PESO</th>
+                <th style="text-align:center;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 12px;border-bottom:1px solid #EEF0F3;width:140px">PRAZO MÍN. (d.úteis)</th>
+                <th style="text-align:center;font-size:11px;font-weight:700;color:#8A93A3;padding:11px 12px;border-bottom:1px solid #EEF0F3;width:110px">EXIGE ANEXO</th>
+              </tr></thead>
+              <tbody>
+                <sc-for list="{{ typeRows }}" as="t" hint-placeholder-count="8">
+                <tr style="border-bottom:1px solid #F2F3F6">
+                  <td style="padding:9px 16px;font-size:13.5px;font-weight:500">{{ t.name }}</td>
+                  <td style="padding:9px 12px;text-align:center"><input type="number" value="{{ t.weight }}" onInput="{{ t.onWeight }}" style="width:62px;padding:6px 8px;border:1px solid #DCE0E7;border-radius:7px;text-align:center;font-weight:600"></td>
+                  <td style="padding:9px 12px;text-align:center"><input type="number" value="{{ t.minDays }}" onInput="{{ t.onMin }}" style="width:62px;padding:6px 8px;border:1px solid #DCE0E7;border-radius:7px;text-align:center;font-weight:600"></td>
+                  <td style="padding:9px 12px;text-align:center"><input type="checkbox" checked="{{ t.requiresAttachment }}" onChange="{{ t.onAttach }}" style="width:16px;height:16px;accent-color:#1F2740"></td>
+                </tr>
+                </sc-for>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ CONFIG CAPACIDADE ============ -->
+        <sc-if value="{{ isCap }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:920px">
+          <div style="font-size:13px;color:#6B7280;background:#fff;border:1px solid #E6E8EC;border-radius:12px;padding:13px 16px;margin-bottom:16px;line-height:1.5">Defina a <strong>capacidade em pontos</strong> de cada semana. Semanas não configuradas usam o padrão de <strong>20 pontos</strong>. Use 0 ou marque "bloqueada" para semanas indisponíveis.</div>
+          <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1fr 90px 90px 1.4fr;background:#FAFBFC;border-bottom:1px solid #EEF0F3">
+              <div style="padding:11px 16px;font-size:11px;font-weight:700;color:#8A93A3">SEMANA</div>
+              <div style="padding:11px 12px;font-size:11px;font-weight:700;color:#8A93A3;text-align:center">PONTOS</div>
+              <div style="padding:11px 12px;font-size:11px;font-weight:700;color:#8A93A3;text-align:center">BLOQUEADA</div>
+              <div style="padding:11px 16px;font-size:11px;font-weight:700;color:#8A93A3">OBSERVAÇÃO</div>
+            </div>
+            <sc-for list="{{ capRows }}" as="c" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:1fr 90px 90px 1.4fr;border-bottom:1px solid #F2F3F6;align-items:center">
+              <div style="padding:10px 16px;font-size:13px;font-weight:600">{{ c.range }} <sc-if value="{{ c.isCurrent }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;font-weight:700;color:#3B5BDB;background:#E8EDFB;padding:1px 6px;border-radius:10px;margin-left:4px">ATUAL</span></sc-if></div>
+              <div style="padding:8px 12px;text-align:center"><input type="number" value="{{ c.points }}" onInput="{{ c.onPoints }}" style="width:60px;padding:6px 8px;border:1px solid #DCE0E7;border-radius:7px;text-align:center;font-weight:600"></div>
+              <div style="padding:8px 12px;text-align:center"><input type="checkbox" checked="{{ c.blocked }}" onChange="{{ c.onBlock }}" style="width:16px;height:16px;accent-color:#D14B41"></div>
+              <div style="padding:8px 16px"><input value="{{ c.notes }}" onInput="{{ c.onNotes }}" placeholder="Ex: Semana de evento" style="width:100%;padding:6px 10px;border:1px solid #DCE0E7;border-radius:7px;font-size:12.5px"></div>
+            </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ NOTIFICAÇÕES ============ -->
+        <sc-if value="{{ isMail }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;max-width:1100px;align-items:start">
+          <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;overflow:hidden">
+            <div style="padding:14px 18px;border-bottom:1px solid #EEF0F3;display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Space Grotesk';font-weight:600;font-size:14.5px">Caixa de saída (simulação)</span><span style="font-size:11px;font-weight:600;color:#6B7280;background:#F2F3F6;padding:3px 9px;border-radius:20px">{{ mailCount }}</span></div>
+            <div style="max-height:560px;overflow-y:auto">
+              <sc-if value="{{ hasMail }}" hint-placeholder-val="{{ true }}">
+              <sc-for list="{{ mailRows }}" as="m" hint-placeholder-count="4">
+                <div onClick="{{ m.onOpen }}" style="{{ m.rowStyle }}">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:{{ m.tagFg }};background:{{ m.tagBg }};padding:2px 8px;border-radius:10px">{{ m.tag }}</span><span style="font-size:11px;color:#9097A3">{{ m.time }}</span></div>
+                  <div style="font-size:13px;font-weight:600;margin-top:7px;line-height:1.35">{{ m.subject }}</div>
+                  <div style="font-size:11.5px;color:#9097A3;margin-top:3px">para: {{ m.recipient }}</div>
+                </div>
+              </sc-for>
+              </sc-if>
+              <sc-if value="{{ noMail }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;color:#9097A3;font-size:13px">Nenhum e-mail enviado ainda. Eles são gerados automaticamente ao criar e movimentar solicitações.</div></sc-if>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:8px;min-height:560px">
+            <sc-if value="{{ mailOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid #EEF0F3;border-radius:11px;overflow:hidden">
+              <div style="padding:18px 22px;border-bottom:1px solid #EEF0F3;background:#FAFBFC">
+                <div style="font-family:'Space Grotesk';font-weight:600;font-size:16px;line-height:1.3">{{ mailSel.subject }}</div>
+                <div style="font-size:12.5px;color:#6B7280;margin-top:8px">De: <strong>Central de Marketing &lt;marketing@vendamais.com.br&gt;</strong></div>
+                <div style="font-size:12.5px;color:#6B7280;margin-top:2px">Para: <strong>{{ mailSel.recipient }}</strong> · {{ mailSel.time }}</div>
+              </div>
+              <div style="padding:22px;font-size:13.5px;line-height:1.75;color:#2A2F38;white-space:pre-wrap">{{ mailSel.body }}</div>
+            </div>
+            </sc-if>
+            <sc-if value="{{ mailClosed }}" hint-placeholder-val="{{ true }}"><div style="height:100%;min-height:540px;display:flex;align-items:center;justify-content:center;color:#9097A3;font-size:13.5px">Selecione um e-mail para visualizar o conteúdo.</div></sc-if>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- ============ DETAIL ============ -->
+        <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:1140px">
+          <button onClick="{{ h.back }}" style="background:none;border:none;color:#5B6472;font-weight:600;font-size:13px;cursor:pointer;margin-bottom:14px">← Voltar</button>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+              <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:14px">
+                  <div>
+                    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                      <span style="font-family:'Space Grotesk';font-weight:700;font-size:13px;color:#8A93A3">{{ det.code }}</span>
+                      <span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:{{ det.stBg }};color:{{ det.stFg }}">{{ det.status }}</span>
+                      <sc-if value="{{ det.confidencial }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:#2A3354;color:#fff">🔒 Confidencial</span></sc-if>
+                    </div>
+                    <div style="font-family:'Space Grotesk';font-weight:700;font-size:22px;margin-top:9px;letter-spacing:-.3px">{{ det.title }}</div>
+                    <div style="font-size:13px;color:#6B7280;margin-top:3px">{{ det.typeName }} · {{ det.area }}</div>
+                  </div>
+                  <div style="text-align:center;background:{{ det.viaBg }};border-radius:11px;padding:11px 16px;flex:none">
+                    <div style="font-size:10px;font-weight:700;color:{{ det.viaFg }};letter-spacing:.3px">VIABILIDADE</div>
+                    <div style="font-family:'Space Grotesk';font-weight:700;font-size:15px;color:{{ det.viaFg }};margin-top:3px">{{ det.viaLabel }}</div>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(98px,1fr));gap:11px;margin-top:18px">
+                  <div style="background:#F7F8FA;border-radius:10px;padding:11px 13px"><div style="font-size:10px;color:#9097A3;font-weight:600">PESO</div><div style="font-family:'Space Grotesk';font-size:18px;font-weight:700;margin-top:2px">{{ det.peso }}</div></div>
+                  <div style="background:#F7F8FA;border-radius:10px;padding:11px 13px"><div style="font-size:10px;color:#9097A3;font-weight:600">PRIORIDADE</div><div style="font-size:14px;font-weight:700;margin-top:4px;color:{{ det.prioFg }}">{{ det.prioridade }}</div></div>
+                  <div style="background:#F7F8FA;border-radius:10px;padding:11px 13px"><div style="font-size:10px;color:#9097A3;font-weight:600">PONTUAÇÃO</div><div style="font-family:'Space Grotesk';font-size:18px;font-weight:700;margin-top:2px">{{ det.score }}</div></div>
+                  <div style="background:#F7F8FA;border-radius:10px;padding:11px 13px"><div style="font-size:10px;color:#9097A3;font-weight:600">RESPONSÁVEL</div><div style="font-size:13px;font-weight:600;margin-top:4px">{{ det.responsavel }}</div></div>
+                </div>
+              </div>
+
+              <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+                <sc-for list="{{ det.sections }}" as="sec" hint-placeholder-count="3">
+                  <div style="margin-bottom:18px">
+                    <div style="font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#8A93A3;margin-bottom:11px">{{ sec.title }}</div>
+                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 24px">
+                      <sc-for list="{{ sec.rows }}" as="row" hint-placeholder-count="4">
+                        <div style="{{ row.wrap }}"><div style="font-size:11.5px;color:#9097A3;margin-bottom:2px">{{ row.label }}</div><div style="font-size:13.5px;line-height:1.45;overflow-wrap:anywhere">{{ row.value }}</div></div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:22px 24px">
+                <div style="font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#8A93A3;margin-bottom:14px">HISTÓRICO DE ALTERAÇÕES</div>
+                <div style="display:flex;flex-direction:column;gap:0">
+                  <sc-for list="{{ det.history }}" as="hh" hint-placeholder-count="3">
+                    <div style="display:flex;gap:13px;padding-bottom:15px;position:relative">
+                      <div style="display:flex;flex-direction:column;align-items:center;flex:none"><span style="width:10px;height:10px;border-radius:50%;background:{{ hh.dot }};margin-top:3px"></span><span style="width:2px;flex:1;background:#EDEFF2"></span></div>
+                      <div style="padding-bottom:4px"><div style="font-size:13px;font-weight:600">{{ hh.text }}</div><div style="font-size:11.5px;color:#9097A3;margin-top:1px">{{ hh.meta }}</div></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+
+            <!-- side: dates + admin actions -->
+            <div style="position:sticky;top:90px;display:flex;flex-direction:column;gap:16px">
+              <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:18px 20px">
+                <div style="font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#8A93A3;margin-bottom:13px">DATAS & SEMANA</div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ det.dates }}" as="dd" hint-placeholder-count="4">
+                    <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="color:#6B7280">{{ dd.label }}</span><span style="font-weight:600;color:{{ dd.color }}">{{ dd.value }}</span></div>
+                  </sc-for>
+                </div>
+              </div>
+
+              <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#fff;border:1px solid #E6E8EC;border-radius:14px;padding:18px 20px">
+                <div style="font-size:11.5px;font-weight:700;letter-spacing:.4px;color:#8A93A3;margin-bottom:13px">TRIAGEM DO MARKETING</div>
+
+                <label style="{{ lblS }}">Status</label>
+                <select value="{{ det.status }}" onChange="{{ h.detStatus }}" style="{{ inS }}">
+                  <sc-for list="{{ statusOptions }}" as="s" hint-placeholder-count="6"><option>{{ s }}</option></sc-for>
+                </select>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:12px">
+                  <div><label style="{{ lblS }}">Prioridade</label><select value="{{ det.prioridade }}" onChange="{{ h.detPrio }}" style="{{ inS }}"><option>Baixa</option><option>Normal</option><option>Alta</option><option>Crítica</option></select></div>
+                  <div><label style="{{ lblS }}">Peso ajustado</label><input type="number" value="{{ det.peso }}" onInput="{{ h.detPeso }}" style="{{ inS }}"></div>
+                </div>
+
+                <label style="{{ lblS }}" >Responsável interno</label>
+                <input value="{{ det.responsavel }}" onInput="{{ h.detResp }}" placeholder="Definir responsável" style="{{ inS }}">
+
+                <label style="{{ lblS }}">Data aprovada de entrega</label>
+                <input type="date" value="{{ det.approvedInput }}" onInput="{{ h.detApprovedDate }}" style="{{ inS }}">
+
+                <div style="display:flex;flex-direction:column;gap:9px;margin-top:9px">
+                  <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;cursor:pointer"><input type="checkbox" checked="{{ det.reserve }}" onChange="{{ h.detReserve }}" style="width:15px;height:15px;accent-color:#1F2740"> Reservar capacidade da semana</label>
+                  <label style="display:flex;align-items:center;gap:9px;font-size:12.5px;cursor:pointer"><input type="checkbox" checked="{{ det.confidencial }}" onChange="{{ h.detConf }}" style="width:15px;height:15px;accent-color:#1F2740"> Marcar como confidencial</label>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px">
+                  <button onClick="{{ h.detApprove }}" style="grid-column:1 / -1;background:#15663C;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer" style-hover="background:#0f5331">✓ Aprovar prazo para produção</button>
+                  <button onClick="{{ h.detReprogram }}" style="background:#E07B2E;color:#fff;border:none;padding:10px;border-radius:9px;font-weight:600;font-size:12.5px;cursor:pointer" style-hover="background:#cc6e25">Reprogramar</button>
+                  <button onClick="{{ h.detReturn }}" style="background:#9A6B12;color:#fff;border:none;padding:10px;border-radius:9px;font-weight:600;font-size:12.5px;cursor:pointer" style-hover="background:#855d10">Devolver briefing</button>
+                  <button onClick="{{ h.detCancel }}" style="background:#fff;color:#6B7280;border:1px solid #DCE0E7;padding:10px;border-radius:9px;font-weight:600;font-size:12.5px;cursor:pointer">Cancelar</button>
+                  <button onClick="{{ h.detReject }}" style="background:#fff;color:#B23B33;border:1px solid #F0CFC9;padding:10px;border-radius:9px;font-weight:600;font-size:12.5px;cursor:pointer">Recusar</button>
+                </div>
+
+                <label style="{{ lblS }}" >Comentário ao solicitante / interno</label>
+                <textarea value="{{ det.commentDraft }}" onInput="{{ h.detComment }}" rows="2" placeholder="Mensagem ou observação…" style="{{ taS }}"></textarea>
+                <button onClick="{{ h.detSendComment }}" style="width:100%;margin-top:9px;background:#1F2740;color:#fff;border:none;padding:9px;border-radius:9px;font-weight:600;font-size:12.5px;cursor:pointer">Enviar comentário</button>
+              </div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+    </main>
+  </div>
+  </sc-if>
+
+  <!-- TOAST -->
+  <sc-if value="{{ toast.show }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:100;background:#1F2740;color:#fff;padding:13px 22px;border-radius:11px;box-shadow:0 12px 30px rgba(20,26,46,.25);font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;max-width:560px">
+    <span style="font-size:15px">{{ toast.icon }}</span><span>{{ toast.msg }}</span>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+class Component extends DCLogic {
+  // ---------- palettes ----------
+  STATUS = {
+    'Recebido':{bg:'#EEF1F5',fg:'#48566B'},
+    'Em triagem':{bg:'#E6EEFB',fg:'#2D5BB8'},
+    'Aguardando briefing':{bg:'#FBF0DC',fg:'#9A6B12'},
+    'Aguardando aprovação de prazo':{bg:'#FCE9DA',fg:'#B5611C'},
+    'Aprovado para produção':{bg:'#DEF1E6',fg:'#1B7A47'},
+    'Em produção':{bg:'#E6E7FB',fg:'#4A45C2'},
+    'Em revisão':{bg:'#F0E6FB',fg:'#7B3FBF'},
+    'Ajustes solicitados':{bg:'#FBE7E2',fg:'#B14A2E'},
+    'Entregue':{bg:'#CDEBD8',fg:'#15663C'},
+    'Cancelado':{bg:'#EDEEF0',fg:'#6B7280'},
+    'Recusado':{bg:'#F8DEDC',fg:'#B23B33'}
+  };
+  VIA = {
+    verde:{bg:'#DEF1E6',fg:'#1B7A47',dot:'#28A468',label:'Viável',head:'#F0F9F3'},
+    amarelo:{bg:'#FBF0DC',fg:'#9A6B12',dot:'#E0A52E',label:'Atenção',head:'#FCF7EA'},
+    vermelho:{bg:'#F8DEDC',fg:'#B23B33',dot:'#D14B41',label:'Inviável',head:'#FDF1EF'}
+  };
+  PRIO = {'Baixa':{fg:'#6B7280',base:10},'Normal':{fg:'#2D5BB8',base:40},'Alta':{fg:'#B5611C',base:70},'Crítica':{fg:'#B23B33',base:100}};
+  IMPACT = {'':0,'Comunicação interna':5,'Cliente ativo':10,'Prospecção':5,'Proposta comercial':20,'Campanha':20,'Evento':25,'Diretoria':25,'Lançamento':30,'Outro':0};
+  CONSUME = ['Aprovado para produção','Em produção','Em revisão','Ajustes solicitados'];
+  CLOSED = ['Entregue','Cancelado','Recusado'];
+  STATUS_LIST = ['Recebido','Em triagem','Aguardando briefing','Aguardando aprovação de prazo','Aprovado para produção','Em produção','Em revisão','Ajustes solicitados','Entregue','Cancelado','Recusado'];
+  inS='width:100%;padding:10px 12px;border:1px solid #DCE0E7;border-radius:9px;background:#fff;outline:none;font-size:13.5px';
+  taS='width:100%;padding:10px 12px;border:1px solid #DCE0E7;border-radius:9px;background:#fff;outline:none;font-size:13.5px;resize:vertical;line-height:1.5';
+  lblS='font-size:12px;font-weight:600;color:#3a4150;display:block;margin-bottom:6px;margin-top:11px';
+
+  state = {
+    screen:'login', role:null, user:null,
+    login:{mode:'solicitante',name:'',email:'',area:'',password:'',error:''},
+    db:null,
+    draft:this.blankDraft(),
+    detailId:null, listFilter:'Todas', calOffset:0, mailId:null,
+    toast:{show:false,msg:'',icon:''}, ready:false
+  };
+
+  blankDraft(){
+    return {nome:'',area:'',email:'',whatsapp:'',aprovador:'',emailAprovador:'',confidencial:false,
+      titulo:'',tipoId:'',clienteProjeto:'',comercial:'',oportunidade:false,
+      oQue:'',objetivo:'',publico:'',canal:'',formato:'',
+      dataDesejada:'',dataUso:'',flexivel:false,prioridade:'Normal',impacto:'',justificativa:'',
+      anexoNome:'',anexoLink:'',ciente:false};
+  }
+
+  // ---------- date helpers ----------
+  pad(n){return String(n).padStart(2,'0');}
+  toISO(d){return `${d.getFullYear()}-${this.pad(d.getMonth()+1)}-${this.pad(d.getDate())}`;}
+  parseISO(s){ if(!s) return null; const [y,m,dd]=s.split('-').map(Number); const d=new Date(y,m-1,dd); d.setHours(0,0,0,0); return d; }
+  fmtBR(d){ if(!d) return '—'; return `${this.pad(d.getDate())}/${this.pad(d.getMonth()+1)}/${d.getFullYear()}`; }
+  fmtShort(d){ if(!d) return '—'; return `${this.pad(d.getDate())}/${this.pad(d.getMonth()+1)}`; }
+  today(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+  isWeekend(d){ const g=d.getDay(); return g===0||g===6; }
+  isHoliday(d){ return this.state.db.holidays.includes(this.toISO(d)); }
+  isBiz(d){ return !this.isWeekend(d)&&!this.isHoliday(d); }
+  addBiz(start,n){ let d=new Date(start); let c=0; let guard=0; while(c<n&&guard<2000){ d.setDate(d.getDate()+1); guard++; if(this.isBiz(d)) c++; } return d; }
+  weekStart(d){ let x=new Date(d); const g=x.getDay(); const diff=(g===0?-6:1-g); x.setDate(x.getDate()+diff); x.setHours(0,0,0,0); return x; }
+  weekEnd(mon){ let e=new Date(mon); e.setDate(e.getDate()+4); return e; }
+  weekKey(d){ return this.toISO(this.weekStart(d)); }
+  weekRangeLabel(mon){ return `${this.fmtShort(mon)} a ${this.fmtShort(this.weekEnd(mon))}`; }
+  addWeeks(d,n){ let x=new Date(d); x.setDate(x.getDate()+n*7); return x; }
+
+  // ---------- capacity ----------
+  capForWeek(key){ const c=this.state.db.capacities[key]; if(c){ return c.blocked?0:c.points; } return 20; }
+  effectiveDate(r){ return this.parseISO(r.approved_delivery_date||r.system_suggested_date||r.desired_delivery_date); }
+  consumes(r){
+    if(this.CLOSED.includes(r.status)) return false;
+    if(this.CONSUME.includes(r.status)) return true;
+    if(r.reserve_capacity) return true;
+    return false;
+  }
+  occupiedForWeek(key, excludeId){
+    let sum=0;
+    for(const r of this.state.db.requests){
+      if(excludeId&&r.id===excludeId) continue;
+      if(!this.consumes(r)) continue;
+      const ed=this.effectiveDate(r); if(!ed) continue;
+      if(this.weekKey(ed)===key) sum+=(r.adjusted_weight||r.default_weight||0);
+    }
+    return sum;
+  }
+  capStyleFor(pct){
+    if(pct>100) return {fg:'#D14B41',bar:'#D14B41',chipBg:'#F8DEDC',chipFg:'#B23B33',tag:'sobrecarga'};
+    if(pct>=90) return {fg:'#E07B2E',bar:'#E07B2E',chipBg:'#FCE9DA',chipFg:'#B5611C',tag:'semana cheia'};
+    if(pct>=70) return {fg:'#C99016',bar:'#E0A52E',chipBg:'#FBF0DC',chipFg:'#9A6B12',tag:'atenção'};
+    return {fg:'#1B7A47',bar:'#28A468',chipBg:'#DEF1E6',chipFg:'#1B7A47',tag:'saudável'};
+  }
+  nextAvailableWeek(weight, minDate, excludeId){
+    let mon=this.weekStart(minDate);
+    for(let i=0;i<60;i++){
+      const key=this.toISO(mon);
+      const cap=this.capForWeek(key);
+      const occ=this.occupiedForWeek(key, excludeId);
+      if(cap-occ>=weight && cap>0){
+        // suggested delivery date inside this week, >= minDate, business day
+        let sug=this.weekEnd(mon); // friday
+        if(minDate>sug) sug=minDate;
+        if(minDate>this.weekStart(mon) && minDate<=sug) sug=minDate;
+        // ensure business day
+        let guard=0; while(!this.isBiz(sug)&&guard<10){ sug.setDate(sug.getDate()+1); guard++; }
+        return {weekKey:key, mon:new Date(mon), date:sug};
+      }
+      mon=this.addWeeks(mon,1);
+    }
+    return {weekKey:this.weekKey(minDate), mon:this.weekStart(minDate), date:minDate};
+  }
+
+  // ---------- viability ----------
+  compute(src, excludeId){
+    const db=this.state.db;
+    const type=db.types.find(t=>t.id===src.tipoId);
+    const weight=src.adjusted_weight!=null?src.adjusted_weight:(type?type.weight:0);
+    const minDays=type?type.minDays:0;
+    const today=this.today();
+    const minDate=type?this.addBiz(today,minDays):today;
+    const desired=this.parseISO(src.dataDesejada||src.desired_delivery_date);
+    const prioridade=src.prioridade||src.priority_requested||'Normal';
+    // briefing complete
+    const req=['nome','area','email','aprovador','titulo','tipoId','oQue','objetivo','publico','canal','formato','dataDesejada','dataUso'];
+    let briefingComplete=req.every(k=>{const v=src[k]; return v!==undefined&&v!==null&&String(v).trim()!=='';});
+    if((prioridade==='Alta'||prioridade==='Crítica') && !String(src.justificativa||src.priority_justification||'').trim()) briefingComplete=false;
+    const attachOK = !type || !type.requiresAttachment || !!(String(src.anexoLink||'').trim()||String(src.anexoNome||'').trim()||(src.files&&src.files.length));
+    // week of desired
+    const desiredWeekKey = desired?this.weekKey(desired):null;
+    const cap = desiredWeekKey?this.capForWeek(desiredWeekKey):0;
+    const occBefore = desiredWeekKey?this.occupiedForWeek(desiredWeekKey, excludeId):0;
+    const availBefore = cap-occBefore;
+    // classify
+    const reasons=[];
+    if(desired && minDate && desired<minDate) reasons.push('Data solicitada menor que o prazo mínimo');
+    if(desired && availBefore<weight) reasons.push('Semana sem capacidade disponível');
+    if(!briefingComplete) reasons.push('Briefing incompleto');
+    if(!attachOK) reasons.push('Arquivos obrigatórios ausentes');
+    let level, msg;
+    if(reasons.length){
+      level='vermelho';
+      msg='O prazo solicitado não é viável com base na fila atual ou no prazo mínimo recomendado. O marketing irá sugerir uma nova data.';
+    } else {
+      const alerts=[];
+      const occAfter = cap>0?((occBefore+weight)/cap):0;
+      if(occAfter>=0.9) alerts.push('Semana ficará com 90% ou mais da capacidade ocupada');
+      if(desired && minDate){ const limit=this.addBiz(minDate,1); if(desired<=limit) alerts.push('Prazo no limite do mínimo recomendado'); }
+      if((prioridade==='Alta'||prioridade==='Crítica') && !String(src.justificativa||src.priority_justification||'').trim()) alerts.push('Prioridade alta/crítica sem justificativa clara');
+      if(alerts.length){ level='amarelo'; msg='Sua solicitação pode ser viável, mas depende da triagem do marketing. A semana solicitada está próxima do limite de capacidade.'; this._lastAlerts=alerts; }
+      else { level='verde'; msg='Sua solicitação está dentro da capacidade estimada. O prazo ainda será confirmado pelo marketing após triagem.'; this._lastAlerts=[]; }
+    }
+    // suggested date
+    let suggested=desired;
+    if(!desired){ suggested=null; }
+    else if(desired>=minDate && availBefore>=weight){ suggested=desired; }
+    else { const na=this.nextAvailableWeek(weight, (minDate>desired?minDate:desired), excludeId); suggested=na.date; }
+    return {type,weight,minDays,minDate,desired,prioridade,briefingComplete,attachOK,cap,occBefore,availBefore,level,msg,reasons,suggested};
+  }
+
+  priorityScore(r){
+    const base=(this.PRIO[r.priority_requested]||{}).base||40;
+    const impact=this.IMPACT[r.impact_type||'']||0;
+    let prox=0;
+    const use=this.parseISO(r.real_use_date);
+    if(use){ const days=Math.round((use-this.today())/86400000);
+      if(days<=3) prox=40; else if(days<=7) prox=30; else if(days<=14) prox=20; else if(days<=30) prox=10; else prox=0; }
+    let pen=0; if(r.viability_status==='vermelho'&&r.status==='Aguardando briefing') pen=-50;
+    return Math.max(0, base+impact+prox+pen);
+  }
+
+  // ---------- persistence ----------
+  componentDidMount(){
+    let db=null;
+    try{ const raw=localStorage.getItem('vm_central_v3'); if(raw) db=JSON.parse(raw); }catch(e){}
+    if(!db) db=this.seed();
+    this.setState({db, ready:true});
+  }
+  save(db){ try{ localStorage.setItem('vm_central_v3', JSON.stringify(db)); }catch(e){} }
+  mutate(fn){ const db=this.state.db; fn(db); this.save(db); this.setState({db}); }
+
+  seed(){
+    const types=[
+      ['Mensagem de WhatsApp',1,1,false],['Texto simples',1,2,false],['Ajuste simples em material existente',1,2,true],
+      ['Post simples',1,3,false],['Arte simples para redes sociais',1,3,false],['E-mail marketing',1,3,false],
+      ['Copy para postagem',1,2,false],['Carrossel',2,5,false],['Proposta comercial simples',2,3,false],
+      ['Apresentação simples',2,4,false],['Peça para evento simples',2,5,false],['Folder',3,7,false],
+      ['Proposta comercial personalizada',3,5,true],['Apresentação comercial personalizada',3,5,false],['Sequência de e-mails',3,7,false],
+      ['Kit de peças para campanha pequena',4,10,false],['Landing page simples',4,10,false],['Material institucional novo',5,12,false],
+      ['Campanha de marketing',5,15,false],['Material completo para evento',6,20,false],['Lançamento de produto ou serviço',8,30,false],
+      ['Projeto especial de marketing',8,30,false],['Reformulação de página do site',8,20,false],['Criação de nova área no site',13,30,false]
+    ].map((t,i)=>({id:'T'+(i+1),name:t[0],weight:t[1],minDays:t[2],requiresAttachment:t[3],active:true}));
+
+    // capacities: from current week, 8 weeks
+    const capacities={};
+    const base=this.weekStart(this.today());
+    const plan=[[0,20,''],[1,20,''],[2,8,'Evento externo'],[3,30,'Semana com mais disponibilidade'],[4,20,''],[5,20,''],[6,20,''],[7,10,'Pouco tempo']];
+    for(const [off,pts,note] of plan){ const mon=this.addWeeks(base,off); capacities[this.toISO(mon)]={points:pts,blocked:false,notes:note}; }
+
+    const holidays=[];
+    const tid=name=>types.find(t=>t.name===name).id;
+    const dateInWeek=(off,dayIdx)=>{ const mon=this.addWeeks(base,off); const d=new Date(mon); d.setDate(d.getDate()+dayIdx); return this.toISO(d); };
+
+    const mk=(n,o)=>{
+      const t=types.find(x=>x.id===o.tipoId);
+      return Object.assign({
+        id:'R'+n, code:`MKT-2026-${this.pad(n)}`, files:[], comments:[], history:[], emails:[],
+        whatsapp:'', emailAprovador:'', clienteProjeto:'', comercial:'', oportunidade:false,
+        oQue:o.oQue||'Produção do material conforme briefing.', objetivo:o.objetivo||'Apoiar a ação comercial.',
+        publico:o.publico||'Clientes e prospects da VendaMais.', canal:o.canal||'E-mail', formato:o.formato||'PDF',
+        flexivel:false, impact_type:o.impact||'', priority_justification:o.just||'',
+        default_weight:t.weight, adjusted_weight:t.weight, min_business_days:t.minDays,
+        reserve_capacity:false, confidential:false, responsavel:o.resp||'',
+        priority_requested:o.prio||'Normal', priority_approved:o.prio||'Normal',
+        viability_status:o.via||'verde', approved_delivery_date:null, system_suggested_date:o.deliver,
+        desired_delivery_date:o.deliver, real_use_date:o.use||o.deliver,
+        created_at:o.created||this.toISO(this.today()), updated_at:o.created||this.toISO(this.today())
+      }, o);
+    };
+
+    const requests=[];
+    let n=1;
+    const add=(o)=>{ const r=mk(n,o); requests.push(r); n++; return r; };
+    // this week ~18/20
+    add({titulo:'Folder institucional para feira',tipoId:tid('Folder'),requester_name:'Marina Alves',email:'marina@vendamais.com.br',area:'Eventos',aprovador:'Carla Souza',status:'Em produção',deliver:dateInWeek(0,3),prio:'Alta',just:'Feira com data marcada',impact:'Evento',resp:'Bruno Lima'});
+    add({titulo:'Campanha de meio de ano',tipoId:tid('Campanha de marketing'),requester_name:'Rafael Dias',email:'rafael@vendamais.com.br',area:'Comercial',aprovador:'Carla Souza',status:'Aprovado para produção',deliver:dateInWeek(0,4),prio:'Normal',impact:'Campanha',resp:'Bruno Lima'});
+    add({titulo:'Disparo newsletter junho',tipoId:tid('E-mail marketing'),requester_name:'Paula Reis',email:'paula@vendamais.com.br',area:'Marketing',aprovador:'Carla Souza',status:'Em revisão',deliver:dateInWeek(0,2),prio:'Normal',resp:'Ana Castro'});
+    add({titulo:'Apresentação para cliente Beta',tipoId:tid('Apresentação comercial personalizada'),requester_name:'Tiago Melo',email:'tiago@vendamais.com.br',area:'Vendas',aprovador:'Carla Souza',status:'Em produção',deliver:dateInWeek(0,3),prio:'Alta',just:'Reunião agendada',impact:'Proposta comercial',resp:'Ana Castro',confidential:true});
+    add({titulo:'Carrossel lançamento app',tipoId:tid('Carrossel'),requester_name:'Marina Alves',email:'marina@vendamais.com.br',area:'Marketing',aprovador:'Carla Souza',status:'Aprovado para produção',deliver:dateInWeek(0,1),prio:'Normal',resp:'Ana Castro'});
+    add({titulo:'Landing page webinar',tipoId:tid('Landing page simples'),requester_name:'Rafael Dias',email:'rafael@vendamais.com.br',area:'Comercial',aprovador:'Carla Souza',status:'Aprovado para produção',deliver:dateInWeek(0,4),prio:'Normal',resp:'Bruno Lima'});
+    // week +1 (8 counted)
+    add({titulo:'Proposta personalizada cliente Gama',tipoId:tid('Proposta comercial personalizada'),requester_name:'Tiago Melo',email:'tiago@vendamais.com.br',area:'Vendas',aprovador:'Carla Souza',status:'Aprovado para produção',deliver:dateInWeek(1,2),prio:'Alta',just:'Oportunidade em fechamento',impact:'Proposta comercial',resp:'Ana Castro'});
+    add({titulo:'Post comemorativo',tipoId:tid('Post simples'),requester_name:'Paula Reis',email:'paula@vendamais.com.br',area:'Marketing',aprovador:'Carla Souza',status:'Em triagem',deliver:dateInWeek(1,3),prio:'Baixa',via:'amarelo'});
+    add({titulo:'Material institucional novo 2026',tipoId:tid('Material institucional novo'),requester_name:'Carla Souza',email:'carla@vendamais.com.br',area:'Diretoria',aprovador:'Diretoria',status:'Aprovado para produção',deliver:dateInWeek(1,4),prio:'Normal',impact:'Diretoria',resp:'Bruno Lima'});
+    // week +2 (evento, cap 8)
+    add({titulo:'Sequência de e-mails nutrição',tipoId:tid('Sequência de e-mails'),requester_name:'Rafael Dias',email:'rafael@vendamais.com.br',area:'Comercial',aprovador:'Carla Souza',status:'Aprovado para produção',deliver:dateInWeek(2,2),prio:'Normal',resp:'Ana Castro'});
+    // other statuses
+    add({titulo:'Ajuste em banner antigo',tipoId:tid('Ajuste simples em material existente'),requester_name:'Marina Alves',email:'marina@vendamais.com.br',area:'Eventos',aprovador:'Carla Souza',status:'Aguardando briefing',deliver:dateInWeek(1,1),prio:'Normal',via:'vermelho'});
+    add({titulo:'Texto para release',tipoId:tid('Texto simples'),requester_name:'Paula Reis',email:'paula@vendamais.com.br',area:'Marketing',aprovador:'Carla Souza',status:'Entregue',deliver:dateInWeek(-1,2),prio:'Normal',resp:'Ana Castro'});
+    add({titulo:'Arte para sorteio',tipoId:tid('Arte simples para redes sociais'),requester_name:'Tiago Melo',email:'tiago@vendamais.com.br',area:'Vendas',aprovador:'Carla Souza',status:'Recusado',deliver:dateInWeek(1,0),prio:'Baixa'});
+
+    // viability for seeds
+    for(const r of requests){ if(!r.viability_status) r.viability_status='verde'; }
+
+    const users=[
+      {name:'Marina Alves',email:'marina@vendamais.com.br',area:'Eventos',role:'solicitante'},
+      {name:'Rafael Dias',email:'rafael@vendamais.com.br',area:'Comercial',role:'solicitante'},
+      {name:'Paula Reis',email:'paula@vendamais.com.br',area:'Marketing',role:'solicitante'},
+      {name:'Tiago Melo',email:'tiago@vendamais.com.br',area:'Vendas',role:'solicitante'}
+    ];
+    return {types,capacities,holidays,requests,emails:[],users,seq:requests.length+1};
+  }
+
+  // ---------- email ----------
+  logEmail(db, type, recipient, subject, body){
+    db.emails.unshift({id:'E'+(db.emails.length+1)+'_'+Date.now(), email_type:type, recipient, subject, body, sent_at:new Date().toISOString()});
+  }
+  addHistory(r, text, reason){
+    r.history=r.history||[]; r.history.unshift({text, reason:reason||'', by:this.state.user?this.state.user.name:'Sistema', at:new Date().toISOString()});
+    r.updated_at=this.toISO(this.today());
+  }
+
+  // ---------- nav ----------
+  go(s){ this.setState({screen:s}); }
+  open(id){ this.setState({screen:'detail', detailId:id}); }
+  showToast(msg, icon){ this.setState({toast:{show:true,msg,icon:icon||'✓'}}); clearTimeout(this._tt); this._tt=setTimeout(()=>this.setState({toast:{show:false,msg:'',icon:''}}),3200); }
+
+  CREDENTIALS = {
+    'admin@vendamais.com.br':{password:'marketing', role:'admin', name:'Carla Souza', roleLabel:'Administrador de marketing'},
+    'diretoria@vendamais.com.br':{password:'diretoria', role:'gestor', name:'Diretoria', roleLabel:'Gestor / Diretoria'}
+  };
+  mkUser(name, area, role, email){
+    return {name, area:area||'—', role, email:email||'', roleLabel:role==='admin'?'Administrador de marketing':role==='gestor'?'Gestor / Diretoria':'Solicitante', initial:(name||'?').trim().charAt(0).toUpperCase(), firstName:(name||'').trim().split(' ')[0]};
+  }
+  doSolicitante=()=>{
+    const l=this.state.login;
+    const name=l.name.trim(), email=l.email.trim().toLowerCase(), area=l.area.trim();
+    if(!name||!email||!area){ this.setState({login:{...l,error:'Preencha nome, e-mail e área para continuar.'}}); return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ this.setState({login:{...l,error:'Informe um e-mail válido.'}}); return; }
+    if(this.CREDENTIALS[email]){ this.setState({login:{...l,error:'Este e-mail é de acesso restrito. Use a aba "Equipe de marketing".'}}); return; }
+    this.mutate(db=>{ db.users=db.users||[]; const ex=db.users.find(u=>u.email===email); if(ex){ ex.name=name; ex.area=area; } else { db.users.push({name,email,area,role:'solicitante'}); } });
+    const user=this.mkUser(name, area, 'solicitante', email);
+    const draft=this.blankDraft(); draft.nome=name; draft.area=area; draft.email=email;
+    this.setState({user, role:'solicitante', screen:'home', draft, login:{...l,error:'',password:''}});
+  };
+  doEquipe=()=>{
+    const l=this.state.login; const email=l.email.trim().toLowerCase(), pass=l.password;
+    const cred=this.CREDENTIALS[email];
+    if(!cred||cred.password!==pass){ this.setState({login:{...l,error:'E-mail ou senha incorretos.'}}); return; }
+    const user=this.mkUser(cred.name, 'Marketing', cred.role, email);
+    this.setState({user, role:cred.role, screen:'dash', login:{...l,error:'',password:''}});
+  };
+  logout=()=>{ this.setState({screen:'login', user:null, role:null, login:{mode:'solicitante',name:'',email:'',area:'',password:'',error:''}}); };
+
+  // ---------- form field handlers ----------
+  fd(key){ return (e)=>{ const v=(e.target.type==='checkbox')?e.target.checked:e.target.value; const draft={...this.state.draft,[key]:v}; if(key==='tipoId'){} this.setState({draft}); }; }
+
+  submit=()=>{
+    const d=this.state.draft;
+    const c=this.compute(d,null);
+    const errors=[];
+    const reqLabels={nome:'Nome',area:'Área',email:'E-mail',aprovador:'Responsável pela aprovação',titulo:'Título',tipoId:'Tipo de demanda',oQue:'O que precisa ser feito',objetivo:'Objetivo',publico:'Público-alvo',canal:'Canal',formato:'Formato',dataDesejada:'Data desejada',dataUso:'Data real de uso'};
+    for(const k in reqLabels){ if(!String(d[k]||'').trim()) errors.push('Preencher: '+reqLabels[k]); }
+    if((d.prioridade==='Alta'||d.prioridade==='Crítica')&&!String(d.justificativa).trim()) errors.push('Justificativa obrigatória para prioridade Alta/Crítica');
+    const today=this.today();
+    if(d.dataDesejada && this.parseISO(d.dataDesejada)<today) errors.push('Data desejada não pode ser anterior a hoje');
+    if(d.dataDesejada && d.dataUso && this.parseISO(d.dataUso)<this.parseISO(d.dataDesejada)) errors.push('Data real de uso não pode ser anterior à data de entrega');
+    if(c.type && c.type.requiresAttachment && !c.attachOK) errors.push('Este tipo de demanda exige um anexo ou link');
+    if(!d.ciente) errors.push('Marcar o aceite das regras de solicitação');
+    if(errors.length){ this.showToast('Há pendências para envio — confira o painel.', '⚠'); return; }
+
+    this.mutate(db=>{
+      const code=`MKT-2026-${this.pad(db.seq)}`;
+      const r={ id:'R'+db.seq, code,
+        title:d.titulo, requester_name:d.nome, area:d.area, email:d.email, whatsapp:d.whatsapp,
+        aprovador:d.aprovador, emailAprovador:d.emailAprovador, confidential:d.confidencial,
+        tipoId:d.tipoId, clienteProjeto:d.clienteProjeto, comercial:d.comercial, oportunidade:d.oportunidade,
+        oQue:d.oQue, objetivo:d.objetivo, publico:d.publico, canal:d.canal, formato:d.formato,
+        desired_delivery_date:d.dataDesejada, real_use_date:d.dataUso, flexivel:d.flexivel,
+        priority_requested:d.prioridade, priority_approved:d.prioridade, priority_justification:d.justificativa, impact_type:d.impacto,
+        status:'Recebido', default_weight:c.weight, adjusted_weight:c.weight, min_business_days:c.minDays,
+        system_suggested_date:c.suggested?this.toISO(c.suggested):d.dataDesejada, approved_delivery_date:null,
+        viability_status:c.level, reserve_capacity:false, responsavel:'',
+        files:d.anexoNome?[{file_name:d.anexoNome, file_url:d.anexoLink}]:[], comments:[], history:[], emails:[],
+        created_at:this.toISO(today), updated_at:this.toISO(today) };
+      this.addHistory(r, 'Solicitação criada com status Recebido', '');
+      db.requests.unshift(r); db.seq++;
+      const sug=c.suggested?this.fmtBR(c.suggested):'a definir';
+      this.logEmail(db,'recebido', d.email, `Solicitação recebida: ${code} - ${d.titulo}`,
+        `Sua solicitação foi recebida pelo marketing.\n\nCódigo: ${code}\nTipo: ${c.type?c.type.name:''}\nData desejada: ${this.fmtBR(this.parseISO(d.dataDesejada))}\nData provável calculada: ${sug}\nStatus: Recebido\n\nO prazo solicitado ainda não está confirmado. O marketing fará a triagem considerando briefing, prioridade, fila atual e capacidade semanal.`);
+      this.logEmail(db,'nova', 'marketing@vendamais.com.br', `Nova solicitação de marketing: ${c.type?c.type.name:''} - ${d.nome}`,
+        `Uma nova solicitação foi aberta.\n\nCódigo: ${code}\nSolicitante: ${d.nome}\nÁrea: ${d.area}\nTipo: ${c.type?c.type.name:''}\nPeso estimado: ${c.weight}\nPrioridade: ${d.prioridade}\nData desejada: ${this.fmtBR(this.parseISO(d.dataDesejada))}\nData sugerida pelo sistema: ${sug}\nStatus de viabilidade: ${(this.VIA[c.level]||{}).label}\n\nAcesse o sistema para fazer a triagem.`);
+    });
+    this.setState({draft:(()=>{const b=this.blankDraft(); b.nome=this.state.user.name; b.area=this.state.user.area; return b;})(), screen:'list', listFilter:'Todas'});
+    this.showToast('Solicitação enviada! E-mails de confirmação registrados.', '✓');
+  };
+
+  // ---------- detail admin actions ----------
+  curDet(){ return this.state.db.requests.find(r=>r.id===this.state.detailId); }
+  detSet(fn, hist){ this.mutate(db=>{ const r=db.requests.find(x=>x.id===this.state.detailId); if(r){ fn(r,db); if(hist) this.addHistory(r,hist); } }); }
+  detStatus=(e)=>{ const v=e.target.value; this.detSet((r)=>{ const old=r.status; r.status=v; r.history.unshift({text:`Status alterado: ${old} → ${v}`,by:this.state.user.name,at:new Date().toISOString()}); r.updated_at=this.toISO(this.today()); }); };
+  detPrio=(e)=>{ const v=e.target.value; this.detSet((r)=>{r.priority_approved=v; r.priority_requested=v;}, `Prioridade ajustada para ${v}`); };
+  detPeso=(e)=>{ const v=parseInt(e.target.value)||0; this.detSet((r)=>{r.adjusted_weight=v;}, `Peso ajustado para ${v}`); };
+  detResp=(e)=>{ const v=e.target.value; this.detSet((r)=>{r.responsavel=v;}); };
+  detApprovedDate=(e)=>{ const v=e.target.value; this.detSet((r)=>{r.approved_delivery_date=v;}); };
+  detReserve=(e)=>{ const v=e.target.checked; this.detSet((r)=>{r.reserve_capacity=v;}, v?'Capacidade reservada':'Reserva de capacidade removida'); };
+  detConf=(e)=>{ const v=e.target.checked; this.detSet((r)=>{r.confidential=v;}); };
+  detComment=(e)=>{ const v=e.target.value; this.detSet((r)=>{r.commentDraft=v;}); };
+
+  detApprove=()=>{ this.mutate(db=>{ const r=db.requests.find(x=>x.id===this.state.detailId); if(!r) return;
+    const date=r.approved_delivery_date||r.system_suggested_date||r.desired_delivery_date; r.approved_delivery_date=date; r.status='Aprovado para produção'; r.viability_status='verde';
+    this.addHistory(r,`Prazo aprovado para ${this.fmtBR(this.parseISO(date))}`);
+    this.logEmail(db,'aprovado', r.email, `Prazo aprovado: ${r.code}`, `Sua solicitação foi aprovada para produção.\n\nCódigo: ${r.code}\nTipo: ${this.typeName(r)}\nData aprovada de entrega: ${this.fmtBR(this.parseISO(date))}\nStatus: Aprovado para produção`);
+  }); this.showToast('Prazo aprovado e e-mail enviado ao solicitante.','✓'); };
+
+  detReprogram=()=>{ this.mutate(db=>{ const r=db.requests.find(x=>x.id===this.state.detailId); if(!r) return;
+    const c=this.compute({tipoId:r.tipoId, dataDesejada:r.desired_delivery_date, adjusted_weight:r.adjusted_weight, prioridade:r.priority_requested}, r.id);
+    const na=this.nextAvailableWeek(r.adjusted_weight||r.default_weight, c.minDate, r.id);
+    r.approved_delivery_date=this.toISO(na.date); r.system_suggested_date=this.toISO(na.date); r.status='Aguardando aprovação de prazo';
+    this.addHistory(r,`Reprogramado para ${this.fmtBR(na.date)} (próxima semana com capacidade)`);
+    this.logEmail(db,'reprogramado', r.email, `Nova previsão de entrega: ${r.code}`, `O prazo solicitado não foi viável considerando a fila atual e a capacidade semanal.\n\nData solicitada: ${this.fmtBR(this.parseISO(r.desired_delivery_date))}\nNova data prevista: ${this.fmtBR(na.date)}\nMotivo: capacidade da semana solicitada esgotada\n\nA solicitação seguirá na fila conforme a nova previsão.`);
+  }); this.showToast('Demanda reprogramada para a próxima semana disponível.','↻'); };
+
+  detReturn=()=>{ this.mutate(db=>{ const r=db.requests.find(x=>x.id===this.state.detailId); if(!r) return;
+    r.status='Aguardando briefing'; this.addHistory(r,'Devolvida para complemento de briefing');
+    this.logEmail(db,'briefing', r.email, `Solicitação precisa de complemento: ${r.code}`, `Sua solicitação foi analisada, mas ainda faltam informações para entrar na fila de produção.\n\nPendências:\n- Complementar o briefing conforme observações do marketing\n\nAssim que as informações forem complementadas, o marketing fará nova triagem.`);
+  }); this.showToast('Briefing devolvido ao solicitante.','↩'); };
+
+  detCancel=()=>{ this.detSet((r)=>{r.status='Cancelado';},'Solicitação cancelada'); this.showToast('Solicitação cancelada.','✓'); };
+  detReject=()=>{ this.detSet((r)=>{r.status='Recusado';},'Solicitação recusada'); this.showToast('Solicitação recusada.','✓'); };
+  detSendComment=()=>{ const r=this.curDet(); if(!r||!String(r.commentDraft||'').trim()){ this.showToast('Escreva um comentário primeiro.','⚠'); return; }
+    this.mutate(db=>{ const x=db.requests.find(y=>y.id===this.state.detailId); const msg=x.commentDraft; x.comments=x.comments||[]; x.comments.unshift({text:msg,by:this.state.user.name,at:new Date().toISOString()}); this.addHistory(x,`Comentário enviado: "${msg.slice(0,60)}"`); x.commentDraft='';
+      this.logEmail(db,'comentario', x.email, `Atualização na solicitação: ${x.code}`, `O marketing enviou uma mensagem sobre sua solicitação ${x.code}:\n\n"${msg}"`);
+    }); this.showToast('Comentário enviado.','✓'); };
+
+  typeName(r){ const t=this.state.db.types.find(x=>x.id===r.tipoId); return t?t.name:'—'; }
+
+  // ---------- config handlers ----------
+  typeWeight(id){ return (e)=>{ const v=parseInt(e.target.value)||0; this.mutate(db=>{ const t=db.types.find(x=>x.id===id); t.weight=v; }); }; }
+  typeMin(id){ return (e)=>{ const v=parseInt(e.target.value)||0; this.mutate(db=>{ const t=db.types.find(x=>x.id===id); t.minDays=v; }); }; }
+  typeAttach(id){ return (e)=>{ const v=e.target.checked; this.mutate(db=>{ const t=db.types.find(x=>x.id===id); t.requiresAttachment=v; }); }; }
+  capPoints(key){ return (e)=>{ const v=parseInt(e.target.value); this.mutate(db=>{ if(!db.capacities[key]) db.capacities[key]={points:20,blocked:false,notes:''}; db.capacities[key].points=isNaN(v)?0:v; }); }; }
+  capBlock(key){ return (e)=>{ const v=e.target.checked; this.mutate(db=>{ if(!db.capacities[key]) db.capacities[key]={points:20,blocked:false,notes:''}; db.capacities[key].blocked=v; }); }; }
+  capNotes(key){ return (e)=>{ const v=e.target.value; this.mutate(db=>{ if(!db.capacities[key]) db.capacities[key]={points:20,blocked:false,notes:''}; db.capacities[key].notes=v; }); }; }
+
+  // ---------- queue ordering ----------
+  queueRequests(){
+    const open=this.state.db.requests.filter(r=>!this.CLOSED.includes(r.status));
+    const rank=r=>{ let s=0; if(r.priority_requested==='Crítica'&&r.status==='Aprovado para produção') s+=10000; s+=this.priorityScore(r); const use=this.parseISO(r.real_use_date); if(use){ s+= Math.max(0, 5000-Math.round((use-this.today())/86400000)); } return s; };
+    return open.sort((a,b)=>rank(b)-rank(a));
+  }
+
+  // =========================================================
+  renderVals(){
+    if(!this.state.ready||!this.state.db) return {isLogin:true,isApp:false,inS:this.inS,taS:this.taS,lblS:this.lblS,login:{isSol:true,isEq:false,mode:'solicitante',tabSolStyle:'flex:1;padding:9px;border:none;border-radius:8px;background:#fff;font-weight:600',tabEqStyle:'flex:1;padding:9px;border:none;border-radius:8px;background:transparent;font-weight:600',name:'',email:'',area:'',password:'',error:'',hasError:false,hasKnown:false,known:[],solCta:'Cadastrar e entrar →'},h:{},toast:{show:false}};
+    const S=this.state, db=S.db, screen=S.screen, role=S.role;
+    const v={};
+    v.isLogin = screen==='login';
+    v.isApp = screen!=='login';
+    v.isAdmin = role==='admin';
+    v.isSolicitante = role==='solicitante';
+    v.toast = S.toast;
+    v.inS=this.inS; v.taS=this.taS; v.lblS=this.lblS;
+
+    // login
+    const L=S.login; const isSol=L.mode==='solicitante';
+    const tabStyle=(on)=>`flex:1;padding:9px;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;background:${on?'#fff':'transparent'};color:${on?'#1F2740':'#6B7280'};box-shadow:${on?'0 1px 3px rgba(20,26,46,.1)':'none'}`;
+    const knownMap={};
+    (db.users||[]).forEach(u=>{ if(u.role==='solicitante') knownMap[u.email]={name:u.name,area:u.area,email:u.email}; });
+    db.requests.forEach(r=>{ if(r.email && !this.CREDENTIALS[r.email] && !knownMap[r.email]) knownMap[r.email]={name:r.requester_name,area:r.area,email:r.email}; });
+    const known=Object.values(knownMap).slice(0,6);
+    v.login={ name:L.name, email:L.email, area:L.area, password:L.password, error:L.error||'', hasError:!!L.error,
+      isSol, isEq:!isSol, mode:L.mode,
+      tabSolStyle:tabStyle(isSol), tabEqStyle:tabStyle(!isSol),
+      solCta: (db.users||[]).some(u=>u.email===L.email.trim().toLowerCase())?'Entrar →':'Cadastrar e entrar →',
+      hasKnown:known.length>0,
+      known: known.map(k=>({label:`${k.name}`, onClick:()=>this.setState({login:{...S.login,mode:'solicitante',name:k.name,email:k.email,area:k.area,error:''}})}))
+    };
+    v.h={ loginName:(e)=>this.setState({login:{...S.login,name:e.target.value,error:''}}),
+      loginArea:(e)=>this.setState({login:{...S.login,area:e.target.value,error:''}}),
+      loginEmail:(e)=>this.setState({login:{...S.login,email:e.target.value,error:''}}),
+      loginPassword:(e)=>this.setState({login:{...S.login,password:e.target.value,error:''}}),
+      modeSol:()=>this.setState({login:{...S.login,mode:'solicitante',error:''}}),
+      modeEq:()=>this.setState({login:{...S.login,mode:'equipe',error:''}}),
+      doSolicitante:this.doSolicitante, doEquipe:this.doEquipe, logout:this.logout, noop:(e)=>{e.preventDefault();},
+      goNew:()=>this.go('new'), goHome:()=>this.go('home'), goMine:()=>this.go('list'), goCal:()=>this.go('cal'),
+      back:()=>this.go(role==='solicitante'?'list':'queue'),
+      calPrev:()=>this.setState({calOffset:S.calOffset-1}), calNext:()=>this.setState({calOffset:S.calOffset+1}),
+      submit:this.submit,
+      detStatus:this.detStatus, detPrio:this.detPrio, detPeso:this.detPeso, detResp:this.detResp,
+      detApprovedDate:this.detApprovedDate, detReserve:this.detReserve, detConf:this.detConf,
+      detApprove:this.detApprove, detReprogram:this.detReprogram, detReturn:this.detReturn,
+      detCancel:this.detCancel, detReject:this.detReject, detComment:this.detComment, detSendComment:this.detSendComment };
+    // form field handlers
+    ['nome','area','email','whatsapp','aprovador','emailAprovador','confidencial','titulo','tipoId','clienteProjeto','comercial','oportunidade','oQue','objetivo','publico','canal','formato','dataDesejada','dataUso','flexivel','prioridade','impacto','justificativa','anexoNome','anexoLink','ciente'].forEach(k=>{ v.h['f_'+k]=this.fd(k); });
+
+    if(v.isLogin) return v;
+
+    // user
+    v.user=S.user;
+
+    // current week chip
+    const curKey=this.weekKey(this.today());
+    const curCap=this.capForWeek(curKey), curOcc=this.occupiedForWeek(curKey,null);
+    const curPct=curCap>0?Math.round((curOcc/curCap)*100):0;
+    const curStyle=this.capStyleFor(curPct);
+    v.curWeek={ usedLabel:`${curOcc} / ${curCap} pts`, pctLabel:curPct+'%', available:Math.max(0,curCap-curOcc),
+      chipBg:curStyle.chipBg, chipFg:curStyle.chipFg, barColor:curStyle.bar, weekRange:this.weekRangeLabel(this.weekStart(this.today())) };
+
+    // nav
+    const navStyle=(active)=>`display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 11px;border:none;border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:${active?'600':'500'};background:${active?'#262F49':'transparent'};color:${active?'#fff':'#AEB6CA'}`;
+    const isOn=(k)=> (screen===k)||(k==='list'&&screen==='detail'&&role==='solicitante')||(k==='queue'&&screen==='detail'&&role!=='solicitante');
+    const item=(k,label,dot)=>({label,dot,onClick:()=>this.go(k),style:navStyle(isOn(k))});
+    if(role==='solicitante'){
+      v.navMain=[item('home','Início','#7C84FF'),item('new','Nova solicitação','#E84C3D'),item('list','Minhas solicitações','#3BC07A'),item('queue','Fila geral','#E0A52E')];
+      v.navConfig=[]; v.showConfig=false;
+    } else {
+      v.navMain=[item('dash','Painel','#7C84FF'),item('queue','Fila geral','#E0A52E'),item('cal','Calendário','#3BC07A'),item('list','Solicitações','#5BA8F5'),item('mail','Notificações','#E84C3D')];
+      v.navConfig=[item('types','Tipos & pesos','#C99016'),item('cap','Capacidade semanal','#3BC07A')];
+      v.showConfig = role==='admin';
+      if(role==='gestor'){ v.navMain=[item('dash','Painel','#7C84FF'),item('queue','Fila geral','#E0A52E'),item('cal','Calendário','#3BC07A')]; }
+    }
+
+    // screen flags
+    v.isHome=screen==='home'; v.isNew=screen==='new'; v.isList=screen==='list'; v.isQueue=screen==='queue';
+    v.isDash=screen==='dash'; v.isCal=screen==='cal'; v.isTypes=screen==='types'; v.isCap=screen==='cap'; v.isMail=screen==='mail'; v.isDetail=screen==='detail';
+
+    const titles={home:['Início','Sua central de solicitações ao marketing'],new:['Nova solicitação','Preencha o briefing — a viabilidade é calculada em tempo real'],list:[role==='solicitante'?'Minhas solicitações':'Todas as solicitações','Acompanhe status, prazos e viabilidade'],queue:['Fila geral','Visão resumida da fila de produção'],dash:['Painel administrativo','Visão geral da operação de marketing'],cal:['Calendário de produção','Entregas e capacidade por semana'],types:['Tipos de demanda, pesos e prazos','Configuração que alimenta o cálculo'],cap:['Capacidade semanal','Pontos disponíveis por semana'],mail:['Notificações','E-mails automáticos gerados pelo sistema'],detail:['Detalhe da solicitação','']};
+    v.screenTitle=(titles[screen]||['',''])[0]; v.screenSub=(titles[screen]||['',''])[1];
+
+    // helper to build row display
+    const stOf=(s)=>this.STATUS[s]||{bg:'#EEF1F5',fg:'#48566B'};
+    const viaOf=(lv)=>this.VIA[lv]||this.VIA.verde;
+    const prazoOf=(r)=> this.fmtBR(this.effectiveDate(r));
+
+    // type options
+    v.typeOptions=db.types.map(t=>({id:t.id,label:`${t.name} · peso ${t.weight} · mín ${t.minDays}d`}));
+
+    // ---- HOME ----
+    if(v.isHome){
+      const myReqs = db.requests.filter(r=>r.email===(S.user.email||'\u0000'));
+      const open=myReqs.filter(r=>!this.CLOSED.includes(r.status)).slice(0,4);
+      v.hasMine=open.length>0; v.noMine=open.length===0;
+      v.homeCards=open.map(r=>({code:r.code,title:r.title,typeName:this.typeName(r),status:r.status,stBg:stOf(r.status).bg,stFg:stOf(r.status).fg,prazo:prazoOf(r),viaLabel:viaOf(r.viability_status).label,viaFg:viaOf(r.viability_status).fg,onOpen:()=>this.open(r.id)}));
+    }
+
+    // ---- NEW (live) ----
+    if(v.isNew){
+      const d=S.draft; v.d=d;
+      const c=this.compute(d,null);
+      const via=viaOf(c.level);
+      const wk = c.desired? this.weekStart(c.desired): this.weekStart(this.today());
+      const wkCap=c.cap, wkOcc=c.occBefore, wkPct=wkCap>0?Math.round((wkOcc/wkCap)*100):0;
+      const cs=this.capStyleFor(wkPct);
+      v.live={ level:c.level, viaLabel:via.label, viaFg:via.fg, dot:via.dot, headBg:via.head, msg:c.msg,
+        peso:c.type?c.weight:'—', minDays:c.type?c.minDays:'—',
+        minDate:c.type?this.fmtBR(c.minDate):'—', desired:this.fmtBR(c.desired), suggested:c.type&&c.desired?this.fmtBR(c.suggested):'—',
+        weekRange:c.desired?this.weekRangeLabel(wk):'—', weekCap:wkCap, weekUsed:wkOcc, weekAvail:Math.max(0,wkCap-wkOcc), weekUsePct:wkPct+'%',
+        capFg:cs.fg, capBar:cs.bar,
+        hasErrors:false, errors:[], hasAlerts:false, alerts:[] };
+      // errors/alerts preview (only when type+dates present)
+      const errs=[]; const reqLabels={nome:'Nome',area:'Área',email:'E-mail',aprovador:'Aprovador',titulo:'Título',tipoId:'Tipo',oQue:'O que fazer',objetivo:'Objetivo',publico:'Público',canal:'Canal',formato:'Formato',dataDesejada:'Data desejada',dataUso:'Data de uso'};
+      let missing=0; for(const k in reqLabels){ if(!String(d[k]||'').trim()) missing++; }
+      if(missing>0) errs.push(`${missing} campo(s) obrigatório(s) pendente(s)`);
+      if((d.prioridade==='Alta'||d.prioridade==='Crítica')&&!String(d.justificativa).trim()) errs.push('Justificativa obrigatória');
+      if(d.dataDesejada&&this.parseISO(d.dataDesejada)<this.today()) errs.push('Data desejada anterior a hoje');
+      if(d.dataDesejada&&d.dataUso&&this.parseISO(d.dataUso)<this.parseISO(d.dataDesejada)) errs.push('Data de uso anterior à entrega');
+      if(c.type&&c.type.requiresAttachment&&!c.attachOK) errs.push('Anexo obrigatório ausente');
+      if(!d.ciente) errs.push('Aceite das regras pendente');
+      const alerts=[];
+      if(c.type&&c.desired){
+        if(c.desired<c.minDate) alerts.push('Prazo abaixo do mínimo recomendado — dependerá de aprovação');
+        if((wkOcc+c.weight)/Math.max(1,wkCap)>=0.9 && c.level!=='vermelho') alerts.push('Semana solicitada no limite de capacidade');
+        if(d.prioridade==='Crítica') alerts.push('Demandas críticas exigem justificativa e passam por triagem');
+      }
+      v.live.errors=errs; v.live.hasErrors=errs.length>0;
+      v.live.alerts=alerts; v.live.hasAlerts=alerts.length>0;
+      v.justReq=(d.prioridade==='Alta'||d.prioridade==='Crítica')?'*':'';
+      v.attachRequired=!!(c.type&&c.type.requiresAttachment);
+      const canSubmit=errs.length===0;
+      v.submitStyle=`background:${canSubmit?'#E84C3D':'#C9CDD6'};color:#fff;border:none;padding:13px;border-radius:10px;font-weight:600;font-size:14.5px;cursor:${canSubmit?'pointer':'not-allowed'}`;
+      v.submitLabel=canSubmit?'Enviar solicitação →':'Complete os campos para enviar';
+    }
+
+    // ---- LIST ----
+    if(v.isList){
+      let rows = role==='solicitante'? db.requests.filter(r=>r.email===(S.user.email||'\u0000')) : db.requests.slice();
+      const filters=['Todas','Em triagem','Em produção','Aguardando briefing','Entregue'];
+      v.listFilters=filters.map(f=>({label:f,onClick:()=>this.setState({listFilter:f}),style:`padding:7px 13px;border-radius:8px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;white-space:nowrap;background:${S.listFilter===f?'#1F2740':'#F2F3F6'};color:${S.listFilter===f?'#fff':'#5B6472'}`}));
+      if(S.listFilter==='Em triagem') rows=rows.filter(r=>['Recebido','Em triagem','Aguardando aprovação de prazo'].includes(r.status));
+      else if(S.listFilter==='Em produção') rows=rows.filter(r=>['Aprovado para produção','Em produção','Em revisão','Ajustes solicitados'].includes(r.status));
+      else if(S.listFilter==='Aguardando briefing') rows=rows.filter(r=>r.status==='Aguardando briefing');
+      else if(S.listFilter==='Entregue') rows=rows.filter(r=>r.status==='Entregue');
+      rows.sort((a,b)=>(b.code).localeCompare(a.code));
+      v.listCols=['CÓDIGO','TÍTULO','STATUS','VIABILIDADE','DATA SOLIC.','PRAZO PREV.','ATUALIZADO'];
+      v.listRows=rows.map(r=>({code:r.code,title:r.title,typeName:this.typeName(r),status:r.status,stBg:stOf(r.status).bg,stFg:stOf(r.status).fg,viaLabel:viaOf(r.viability_status).label,viaDot:viaOf(r.viability_status).dot,desired:this.fmtBR(this.parseISO(r.desired_delivery_date)),prazo:prazoOf(r),updated:this.fmtBR(this.parseISO(r.updated_at)),onOpen:()=>this.open(r.id)}));
+      v.listEmpty=rows.length===0;
+    }
+
+    // ---- QUEUE ----
+    if(v.isQueue){
+      const q=this.queueRequests();
+      v.queueRows=q.map((r,i)=>{ const p=this.PRIO[r.priority_requested]||{}; return {
+        ordem:String(i+1).padStart(2,'0'), typeName:r.confidential&&role!=='admin'?'Demanda confidencial':this.typeName(r),
+        area:r.area, status:r.status, stBg:stOf(r.status).bg, stFg:stOf(r.status).fg,
+        week:this.weekRangeLabel(this.weekStart(this.effectiveDate(r)||this.today())), prazo:prazoOf(r),
+        peso:r.adjusted_weight||r.default_weight, prioTag:(r.priority_requested==='Crítica'||r.priority_requested==='Alta')?'· '+r.priority_requested:'', prioFg:p.fg||'#6B7280',
+        onOpen:()=>{ if(role==='admin'||!r.confidential) this.open(r.id); } };
+      });
+    }
+
+    // ---- DASH ----
+    if(v.isDash){
+      const all=db.requests;
+      const count=(fn)=>all.filter(fn).length;
+      v.kpis=[
+        {label:'Solicitações abertas',value:count(r=>!this.CLOSED.includes(r.status)),sub:'em andamento',color:'#1F2740'},
+        {label:'Em produção',value:count(r=>['Aprovado para produção','Em produção','Em revisão','Ajustes solicitados'].includes(r.status)),sub:'consumindo capacidade',color:'#4A45C2'},
+        {label:'Aguardando briefing',value:count(r=>r.status==='Aguardando briefing'),sub:'precisam de complemento',color:'#9A6B12'},
+        {label:'Capacidade da semana',value:v.curWeek.available,sub:`${curOcc}/${curCap} pts usados`,color:curStyle.fg}
+      ];
+      // week bars (current + 4)
+      const base=this.weekStart(this.today());
+      v.weekBars=[];
+      for(let i=0;i<5;i++){ const mon=this.addWeeks(base,i); const key=this.toISO(mon); const cap=this.capForWeek(key); const occ=this.occupiedForWeek(key,null); const pct=cap>0?Math.round((occ/cap)*100):0; const cs=this.capStyleFor(pct); const cfg=db.capacities[key];
+        v.weekBars.push({range:this.weekRangeLabel(mon),note:cfg&&cfg.notes?'· '+cfg.notes:'',used:occ,cap:cap,pct:pct+'%',fg:cs.fg,bar:cs.bar,barW:Math.min(100,pct)+'%'}); }
+      // status dist
+      const order=['Recebido','Em triagem','Aguardando briefing','Aprovado para produção','Em produção','Em revisão','Entregue'];
+      v.statusDist=order.map(s=>({label:s,count:count(r=>r.status===s),fg:stOf(s).fg})).filter(x=>x.count>0);
+      // upcoming
+      const up=all.filter(r=>!this.CLOSED.includes(r.status)&&this.effectiveDate(r)).sort((a,b)=>this.effectiveDate(a)-this.effectiveDate(b)).slice(0,6);
+      v.hasUpcoming=up.length>0; v.noUpcoming=up.length===0;
+      v.upcoming=up.map(r=>({code:r.code,title:r.title,area:r.area,peso:r.adjusted_weight||r.default_weight,status:r.status,stBg:stOf(r.status).bg,stFg:stOf(r.status).fg,date:this.fmtShort(this.effectiveDate(r)),onOpen:()=>this.open(r.id)}));
+    }
+
+    // ---- CALENDAR ----
+    if(v.isCal){
+      const ref=new Date(this.today().getFullYear(), this.today().getMonth()+S.calOffset, 1);
+      v.calMonthLabel=ref.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+      v.calDayHeads=['SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA'];
+      const monthStart=this.weekStart(ref);
+      v.calWeeks=[];
+      for(let w=0; w<6; w++){
+        const mon=this.addWeeks(monthStart,w);
+        if(mon.getMonth()!==ref.getMonth() && w>0 && mon>new Date(ref.getFullYear(),ref.getMonth()+1,1)) break;
+        const key=this.toISO(mon); const cap=this.capForWeek(key); const occ=this.occupiedForWeek(key,null); const pct=cap>0?Math.round((occ/cap)*100):0; const cs=this.capStyleFor(pct);
+        const days=[];
+        for(let dd=0; dd<5; dd++){ const day=new Date(mon); day.setDate(day.getDate()+dd); const inMonth=day.getMonth()===ref.getMonth();
+          const items=db.requests.filter(r=>{ const ed=this.effectiveDate(r); return ed && this.toISO(ed)===this.toISO(day) && !this.CLOSED.includes(r.status); })
+            .map(r=>({label:`${r.code.slice(-2)} ${this.typeName(r).slice(0,14)}`,title:`${r.code} · ${r.title}`,bg:stOf(r.status).bg,fg:stOf(r.status).fg,onOpen:()=>this.open(r.id)}));
+          days.push({num:day.getDate(),items,numColor:inMonth?'#3a4150':'#C2C7D1',cellStyle:`padding:9px 11px;border-right:1px solid #F2F3F6;background:${inMonth?'#fff':'#FAFBFC'}`});
+        }
+        v.calWeeks.push({range:this.weekRangeLabel(mon),days,cap,used:occ,pct:pct+'%',fg:cs.fg,bar:cs.bar,barW:Math.min(100,pct)+'%',tag:cs.tag});
+        if(mon.getMonth()!==ref.getMonth() && w>=4) break;
+      }
+    }
+
+    // ---- TYPES ----
+    if(v.isTypes){
+      v.typeRows=db.types.map(t=>({name:t.name,weight:t.weight,minDays:t.minDays,requiresAttachment:t.requiresAttachment,onWeight:this.typeWeight(t.id),onMin:this.typeMin(t.id),onAttach:this.typeAttach(t.id)}));
+    }
+
+    // ---- CAP ----
+    if(v.isCap){
+      const base=this.weekStart(this.today());
+      v.capRows=[];
+      for(let i=-1;i<10;i++){ const mon=this.addWeeks(base,i); const key=this.toISO(mon); const c=db.capacities[key]||{points:20,blocked:false,notes:''};
+        v.capRows.push({range:this.weekRangeLabel(mon),points:c.points,blocked:c.blocked,notes:c.notes,isCurrent:i===0,onPoints:this.capPoints(key),onBlock:this.capBlock(key),onNotes:this.capNotes(key)}); }
+    }
+
+    // ---- MAIL ----
+    if(v.isMail){
+      const tagMeta={recebido:{t:'Recebido',bg:'#EEF1F5',fg:'#48566B'},nova:{t:'Nova (MKT)',bg:'#E6EEFB',fg:'#2D5BB8'},aprovado:{t:'Aprovado',bg:'#DEF1E6',fg:'#1B7A47'},reprogramado:{t:'Reprogramado',bg:'#FCE9DA',fg:'#B5611C'},briefing:{t:'Briefing',bg:'#FBF0DC',fg:'#9A6B12'},entrega:{t:'Entrega',bg:'#CDEBD8',fg:'#15663C'},comentario:{t:'Comentário',bg:'#F0E6FB',fg:'#7B3FBF'}};
+      v.mailCount=db.emails.length+' e-mails';
+      v.hasMail=db.emails.length>0; v.noMail=db.emails.length===0;
+      const fmtTime=(iso)=>{ const d=new Date(iso); return `${this.pad(d.getDate())}/${this.pad(d.getMonth()+1)} ${this.pad(d.getHours())}:${this.pad(d.getMinutes())}`; };
+      v.mailRows=db.emails.map(m=>{ const tm=tagMeta[m.email_type]||{t:m.email_type,bg:'#EEF1F5',fg:'#48566B'}; const sel=S.mailId===m.id;
+        return {tag:tm.t,tagBg:tm.bg,tagFg:tm.fg,subject:m.subject,recipient:m.recipient,time:fmtTime(m.sent_at),onOpen:()=>this.setState({mailId:m.id}),rowStyle:`padding:14px 18px;border-bottom:1px solid #F2F3F6;cursor:pointer;background:${sel?'#F3F5FA':'#fff'};border-left:3px solid ${sel?'#1F2740':'transparent'}`}; });
+      const sel=db.emails.find(m=>m.id===S.mailId);
+      v.mailOpen=!!sel; v.mailClosed=!sel;
+      if(sel) v.mailSel={subject:sel.subject,recipient:sel.recipient,body:sel.body,time:fmtTime(sel.sent_at)};
+    }
+
+    // ---- DETAIL ----
+    if(v.isDetail){
+      const r=this.curDet();
+      if(r){
+        const via=viaOf(r.viability_status); const p=this.PRIO[r.priority_requested]||{};
+        const ed=this.effectiveDate(r);
+        const wrapFull='grid-column:1 / -1';
+        const yn=(b)=>b?'Sim':'Não';
+        v.det={
+          code:r.code,title:r.title,typeName:this.typeName(r),area:r.area,status:r.status,
+          stBg:stOf(r.status).bg,stFg:stOf(r.status).fg, confidencial:!!r.confidential,
+          viaLabel:via.label,viaFg:via.fg,viaBg:via.bg,
+          peso:r.adjusted_weight||r.default_weight,prioridade:r.priority_requested,prioFg:p.fg||'#6B7280',
+          score:this.priorityScore(r), responsavel:r.responsavel||'—',
+          reserve:!!r.reserve_capacity, approvedInput:r.approved_delivery_date||'', commentDraft:r.commentDraft||'',
+          sections:[
+            {title:'SOLICITANTE',rows:[{label:'Nome',value:r.requester_name||'—',wrap:''},{label:'Área',value:r.area||'—',wrap:''},{label:'E-mail',value:r.email||'—',wrap:''},{label:'Aprovador',value:r.aprovador||'—',wrap:''}]},
+            {title:'BRIEFING',rows:[{label:'O que precisa ser feito',value:r.oQue||'—',wrap:wrapFull},{label:'Objetivo',value:r.objetivo||'—',wrap:wrapFull},{label:'Público-alvo',value:r.publico||'—',wrap:wrapFull},{label:'Canal',value:r.canal||'—',wrap:''},{label:'Formato',value:r.formato||'—',wrap:''}]},
+            {title:'CONTEXTO',rows:[{label:'Cliente / projeto',value:r.clienteProjeto||'—',wrap:''},{label:'Oportunidade comercial',value:yn(r.oportunidade),wrap:''},{label:'Impacto',value:r.impact_type||'—',wrap:''},{label:'Justificativa',value:r.priority_justification||'—',wrap:''},{label:'Prazo flexível',value:yn(r.flexivel),wrap:''},{label:'Anexos',value:(r.files&&r.files.length)?r.files.map(f=>f.file_name).join(', '):'Nenhum',wrap:''}]}
+          ],
+          dates:[
+            {label:'Aberta em',value:this.fmtBR(this.parseISO(r.created_at)),color:'#1A1D23'},
+            {label:'Data mínima possível',value:this.fmtBR(this.addBiz(this.today(),r.min_business_days||0)),color:'#1A1D23'},
+            {label:'Data desejada',value:this.fmtBR(this.parseISO(r.desired_delivery_date)),color:'#1A1D23'},
+            {label:'Data sugerida (sistema)',value:this.fmtBR(this.parseISO(r.system_suggested_date)),color:'#1A1D23'},
+            {label:'Data aprovada (marketing)',value:r.approved_delivery_date?this.fmtBR(this.parseISO(r.approved_delivery_date)):'a definir',color:r.approved_delivery_date?'#1B7A47':'#9097A3'},
+            {label:'Semana de entrega',value:ed?this.weekRangeLabel(this.weekStart(ed)):'—',color:'#1A1D23'},
+            {label:'Data real de uso',value:this.fmtBR(this.parseISO(r.real_use_date)),color:'#1A1D23'}
+          ],
+          history:(r.history||[]).map((hh,i)=>({text:hh.text,meta:`${hh.by} · ${new Date(hh.at).toLocaleDateString('pt-BR')} ${this.pad(new Date(hh.at).getHours())}:${this.pad(new Date(hh.at).getMinutes())}`,dot:i===0?'#1F2740':'#C2C7D1'}))
+        };
+        v.statusOptions=this.STATUS_LIST;
+      } else { v.det={code:'',title:'',sections:[],dates:[],history:[]}; v.statusOptions=this.STATUS_LIST; }
+    }
+
+    return v;
+  }
+}
+</script>
+</body>
+</html>
