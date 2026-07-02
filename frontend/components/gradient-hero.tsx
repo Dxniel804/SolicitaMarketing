@@ -31,7 +31,10 @@ export function GradientHero({
   illustration?: string;
 }) {
   return (
-    <section className="relative -mx-8 -mt-8 mb-8 overflow-hidden px-8 pb-28 pt-6" style={{ background: GRADIENT_BG }}>
+    <section
+      className="relative -mx-8 -mt-8 mb-8 min-h-[420px] overflow-hidden px-14 pb-16 pt-6"
+      style={{ background: GRADIENT_BG }}
+    >
       <svg
         className="pointer-events-none absolute inset-x-0 bottom-0 h-64 w-full"
         viewBox="0 0 1440 260"
@@ -54,7 +57,7 @@ export function GradientHero({
         </button>
       </div>
 
-      <div className="relative z-10 flex items-center justify-between gap-8">
+      <div className="relative z-10 flex items-center gap-4">
         <div className="max-w-xl">
           {breadcrumbs && breadcrumbs.length > 0 && (
             <nav className="mb-3 flex items-center gap-2 text-sm">

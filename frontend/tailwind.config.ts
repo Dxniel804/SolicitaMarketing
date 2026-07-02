@@ -14,7 +14,7 @@ const config: Config = {
           primary: "#2952E3",
           primaryDark: "#1B3ACB",
           accent: "#E84C3D",
-          sidebar: "#182347",
+          sidebar: "#0E1730",
         },
       },
       backgroundImage: {

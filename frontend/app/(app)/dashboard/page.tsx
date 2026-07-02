@@ -91,13 +91,13 @@ export default function DashboardPage() {
           <>
             <Link
               href="/queue"
-              className="flex items-center gap-2 rounded-xl bg-vm-ink px-5 py-3 text-sm font-semibold text-white"
+              className="flex items-center gap-2 rounded-xl bg-vm-ink px-7 py-4 text-base font-semibold text-white transition-colors hover:bg-vm-inkSoft"
             >
-              Ver fila geral <ArrowRight size={14} />
+              Ver fila geral <ArrowRight size={16} />
             </Link>
             <Link
               href="/reports"
-              className="rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-vm-ink"
+              className="rounded-xl border border-gray-200 bg-white px-7 py-4 text-base font-semibold text-vm-ink transition-colors hover:bg-gray-50"
             >
               Ver relatórios
             </Link>
