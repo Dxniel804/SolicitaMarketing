@@ -1,0 +1,41 @@
+[project]
+name = "central-solicitacoes-marketing-backend"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  # Pinned below 0.120: newer FastAPI releases (tested against 0.139.0) ship a
+  # lazy route-materialization mechanism (`_IncludedRouter`/`effective_candidates`)
+  # that, at least as of this writing, causes every path added via
+  # `include_router` to 404 under a real ASGI server (uvicorn) even though the
+  # routes are visible via `app.openapi()` in-process. Revisit this pin once
+  # that's confirmed fixed upstream.
+  "fastapi>=0.115,<0.120",
+  "starlette<0.42",
+  "uvicorn[standard]>=0.30",
+  "sqlalchemy[asyncio]>=2.0",
+  "asyncpg>=0.29",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "pyjwt>=2.8",
+  "cryptography>=42.0",
+  "httpx>=0.27",
+  "supabase>=2.5",
+  "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2",
+  "pytest-asyncio>=0.23",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
