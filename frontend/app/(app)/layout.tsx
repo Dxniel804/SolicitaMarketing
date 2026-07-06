@@ -15,7 +15,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/me`, {
     headers: { Authorization: `Bearer ${session.access_token}` },
-    cache: "no-store",
+    next: { revalidate: 30 },
   });
 
   if (!res.ok) {

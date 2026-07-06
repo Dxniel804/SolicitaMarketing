@@ -1,4 +1,4 @@
-const TAG_COLOR: Record<string, string> = {
+export const TAG_COLOR: Record<string, string> = {
   saudável: "#28A468",
   atenção: "#E0A52E",
   "semana cheia": "#E07B2E",

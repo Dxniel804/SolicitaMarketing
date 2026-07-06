@@ -91,13 +91,13 @@ export default function DashboardPage() {
           <>
             <Link
               href="/queue"
-              className="flex items-center gap-2 rounded-xl bg-vm-ink px-7 py-4 text-base font-semibold text-white transition-colors hover:bg-vm-inkSoft"
+              className="flex items-center gap-2 rounded-xl bg-vm-ink px-7 py-4 text-base font-semibold text-white shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:bg-vm-inkSoft hover:shadow-md active:translate-y-0"
             >
               Ver fila geral <ArrowRight size={16} />
             </Link>
             <Link
               href="/reports"
-              className="rounded-xl border border-gray-200 bg-white px-7 py-4 text-base font-semibold text-vm-ink transition-colors hover:bg-gray-50"
+              className="rounded-xl border border-gray-200 bg-white px-7 py-4 text-base font-semibold text-vm-ink shadow-sm transition-all duration-150 hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md active:translate-y-0"
             >
               Ver relatórios
             </Link>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm lg:col-span-2">
+        <div className="rounded-2xl border border-black/15 bg-white p-5 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="font-bold text-vm-ink">Solicitações recentes</h2>
             <Link href="/my-requests" className="flex items-center gap-1 text-sm font-semibold text-vm-primary">
@@ -189,19 +189,19 @@ export default function DashboardPage() {
           </table>
         </div>
 
-        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="rounded-2xl border border-black/15 bg-white p-5">
           <h2 className="mb-4 font-bold text-vm-ink">Distribuição por status</h2>
           <StatusDonut data={statusData} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm lg:col-span-2">
+        <div className="rounded-2xl border border-black/15 bg-white p-5 lg:col-span-2">
           <h2 className="mb-4 font-bold text-vm-ink">Solicitações por mês</h2>
           <MonthlyTrendChart data={monthlySeries} />
         </div>
 
-        <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="rounded-2xl border border-black/15 bg-white p-5">
           <h2 className="mb-4 font-bold text-vm-ink">Atividades recentes</h2>
           <ul className="space-y-4">
             {(activity ?? []).map((a, i) => (

@@ -23,16 +23,18 @@ export function GradientHero({
   subtitle,
   actions,
   illustration,
+  illustrationClassName,
 }: {
   breadcrumbs?: Crumb[];
   title: string;
   subtitle?: string;
   actions?: ReactNode;
   illustration?: string;
+  illustrationClassName?: string;
 }) {
   return (
     <section
-      className="relative -mx-8 -mt-8 mb-8 min-h-[420px] overflow-hidden px-14 pb-16 pt-6"
+      className="relative -mx-8 -mt-8 mb-4 min-h-[340px] overflow-hidden px-14 pb-16 pt-6"
       style={{ background: GRADIENT_BG }}
     >
       <svg
@@ -57,7 +59,7 @@ export function GradientHero({
         </button>
       </div>
 
-      <div className="relative z-10 flex items-center gap-4">
+      <div className="relative z-10 flex items-start gap-4">
         <div className="max-w-xl">
           {breadcrumbs && breadcrumbs.length > 0 && (
             <nav className="mb-3 flex items-center gap-2 text-sm">
@@ -82,7 +84,11 @@ export function GradientHero({
 
         {illustration && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={illustration} alt="" className="hidden w-full max-w-2xl shrink-0 lg:block" />
+          <img
+            src={illustration}
+            alt=""
+            className={illustrationClassName ?? "hidden w-full max-w-2xl shrink-0 lg:block"}
+          />
         )}
       </div>
     </section>

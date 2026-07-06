@@ -121,9 +121,11 @@ export default function MyRequestsPage() {
             ? "Acompanhe o status, prazos e viabilidade das suas solicitações."
             : "Acompanhe o status, prazos e viabilidade de todas as solicitações."
         }
+        illustration="/invite-illustration.png"
+        illustrationClassName="hidden max-h-80 w-auto shrink-0 lg:ml-auto lg:block"
       />
 
-      <div className="mb-8 grid grid-cols-1 divide-y divide-gray-100 rounded-2xl border border-gray-100 bg-white shadow-sm sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+      <div className="mb-8 grid grid-cols-1 divide-y divide-gray-100 rounded-2xl border border-black/15 bg-white sm:grid-cols-4 sm:divide-x sm:divide-y-0">
         {stats.map((s) => (
           <div key={s.label} className="flex items-center gap-4 p-5">
             <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${s.tone}`}>
@@ -143,7 +145,7 @@ export default function MyRequestsPage() {
         ))}
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border border-black/15 bg-white p-5">
         <h2 className="mb-4 font-bold text-vm-ink">Lista de solicitações</h2>
 
         <table className="w-full text-sm">

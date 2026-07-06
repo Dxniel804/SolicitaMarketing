@@ -10,14 +10,12 @@ import {
   FileEarmarkPlus,
   FileEarmarkText,
   Stack,
-  Speedometer2,
   Calendar3,
   BarChartFill,
   Sliders,
   BoxArrowRight,
   ChevronLeft,
   ChevronRight,
-  Diagram3Fill,
   type Icon as BootstrapIcon,
 } from "react-bootstrap-icons";
 
@@ -35,7 +33,7 @@ const SOLICITANTE_NAV: NavItem[] = [
 ];
 
 const ADMIN_NAV: NavItem[] = [
-  { href: "/dashboard", label: "Painel", icon: Speedometer2 },
+  { href: "/dashboard", label: "Dashboard", icon: HouseFill },
   { href: "/queue", label: "Fila geral", icon: Stack },
   { href: "/calendar", label: "Calendário", icon: Calendar3 },
   { href: "/my-requests", label: "Solicitações", icon: FileEarmarkText },
@@ -48,7 +46,7 @@ const ADMIN_CONFIG_NAV: NavItem[] = [
 ];
 
 const GESTOR_NAV: NavItem[] = [
-  { href: "/dashboard", label: "Painel", icon: Speedometer2 },
+  { href: "/dashboard", label: "Dashboard", icon: HouseFill },
   { href: "/queue", label: "Fila geral", icon: Stack },
   { href: "/calendar", label: "Calendário", icon: Calendar3 },
   { href: "/reports", label: "Relatórios", icon: BarChartFill },
@@ -112,9 +110,6 @@ export function Sidebar({ role }: { role: Role }) {
       }`}
     >
       <div className={`flex items-center gap-3 p-4 ${collapsed ? "flex-col" : ""}`}>
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-vm-gradient">
-          <Diagram3Fill size={18} className="text-white" />
-        </div>
         {!collapsed && (
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-bold">Central de Marketing</p>

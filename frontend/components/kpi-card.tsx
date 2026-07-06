@@ -24,7 +24,7 @@ export function KpiCard({
   deltaPct?: number | null;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <div className="flex items-center gap-4 rounded-2xl border border-black/15 bg-white p-5">
       <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${TONES[tone]}`}>
         <Icon size={20} />
       </div>
