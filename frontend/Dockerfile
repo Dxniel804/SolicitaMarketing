@@ -15,9 +15,12 @@ ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
     NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
     NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL \
     NEXT_TELEMETRY_DISABLED=1
-RUN if [ -f .env ]; then echo "BUILD-CHECK: .env presente com $(grep -c NEXT_PUBLIC .env) vars NEXT_PUBLIC"; else echo "BUILD-CHECK: .env AUSENTE no contexto"; fi; \
-    [ -n "$NEXT_PUBLIC_SUPABASE_URL" ] && echo "BUILD-CHECK: build-arg NEXT_PUBLIC_SUPABASE_URL presente" || echo "BUILD-CHECK: build-arg ausente"
+RUN grep -q "NEXT_PUBLIC_SUPABASE_URL=" .env.production 2>/dev/null || [ -n "$NEXT_PUBLIC_SUPABASE_URL" ] || \
+    (echo "ERRO: variaveis NEXT_PUBLIC ausentes no build (.env.production nao encontrado e sem build-args)" && exit 1)
 RUN npm run build
+# Trava: falha o build se as envs publicas nao foram embutidas no bundle do middleware
+RUN grep -q "supabase.co" .next/server/middleware.js || \
+    (echo "ERRO: envs NEXT_PUBLIC nao foram embutidas no middleware — build invalido" && exit 1)
 
 FROM node:20-alpine AS runner
 WORKDIR /app
