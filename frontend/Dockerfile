@@ -15,6 +15,8 @@ ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
     NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
     NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL \
     NEXT_TELEMETRY_DISABLED=1
+RUN if [ -f .env ]; then echo "BUILD-CHECK: .env presente com $(grep -c NEXT_PUBLIC .env) vars NEXT_PUBLIC"; else echo "BUILD-CHECK: .env AUSENTE no contexto"; fi; \
+    [ -n "$NEXT_PUBLIC_SUPABASE_URL" ] && echo "BUILD-CHECK: build-arg NEXT_PUBLIC_SUPABASE_URL presente" || echo "BUILD-CHECK: build-arg ausente"
 RUN npm run build
 
 FROM node:20-alpine AS runner
