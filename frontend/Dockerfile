@@ -7,20 +7,18 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# NEXT_PUBLIC_* sao inlined no bundle durante o build; precisam chegar como build args
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
-ARG NEXT_PUBLIC_API_BASE_URL
-ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
-    NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
-    NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL \
-    NEXT_TELEMETRY_DISABLED=1
-RUN grep -q "NEXT_PUBLIC_SUPABASE_URL=" .env.production 2>/dev/null || [ -n "$NEXT_PUBLIC_SUPABASE_URL" ] || \
-    (echo "ERRO: variaveis NEXT_PUBLIC ausentes no build (.env.production nao encontrado e sem build-args)" && exit 1)
+# NEXT_PUBLIC_* vem exclusivamente do .env.production commitado (valores publicos).
+# NUNCA declarar ARG/ENV NEXT_PUBLIC_* aqui: build-arg ausente vira string vazia,
+# e env ja definida (mesmo vazia) faz o next build ignorar o .env.production.
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN grep -q "^NEXT_PUBLIC_SUPABASE_URL=https://" .env.production || \
+    (echo "ERRO: .env.production ausente do contexto de build ou sem NEXT_PUBLIC_SUPABASE_URL" && exit 1)
 RUN npm run build
-# Trava: falha o build se as envs publicas nao foram embutidas no bundle do middleware
-RUN grep -q "supabase.co" .next/server/middleware.js || \
-    (echo "ERRO: envs NEXT_PUBLIC nao foram embutidas no middleware — build invalido" && exit 1)
+# Trava: a ref do projeto (extraida do .env.production) precisa estar embutida no
+# bundle. Procurar so "supabase.co" nao vale — a propria lib @supabase contem essa string.
+RUN REF=$(sed -n 's|^NEXT_PUBLIC_SUPABASE_URL=https://\([^.]*\)\.supabase\.co.*|\1|p' .env.production); \
+    [ -n "$REF" ] && grep -q "$REF" .next/server/middleware.js && grep -rq "$REF" .next/static/chunks/ || \
+    (echo "ERRO: envs NEXT_PUBLIC nao foram embutidas no bundle — build invalido" && exit 1)
 
 FROM node:20-alpine AS runner
 WORKDIR /app
