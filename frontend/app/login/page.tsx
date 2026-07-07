@@ -24,6 +24,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -76,20 +77,20 @@ export default function LoginPage() {
         setError(`Erro do Supabase: ${err.message} (status ${err.status ?? "?"})`);
         return;
       }
-      // TEMP DIAGNOSTIC: confirm the browser client actually holds a session
-      // right after verifyOtp resolves, before we navigate anywhere.
+      // Guarda: só navega quando o client realmente persistiu a sessão,
+      // senão o middleware devolveria o usuário para o login.
       const { data: sessionData } = await supabase.auth.getSession();
       setVerifying(false);
       if (!sessionData.session) {
         setError(
-          `verifyOtp disse sucesso (user ${data.user?.id ?? "?"}) mas getSession() não encontrou sessão no navegador.`
+          `Não foi possível criar a sessão neste navegador (user ${data.user?.id ?? "?"}). Tente pedir um novo código.`
         );
         return;
       }
-      setError(`OK: sessão criada para ${sessionData.session.user.email}. Indo para /home...`);
+      setSuccess(true);
       setTimeout(() => {
         window.location.href = "/home";
-      }, 1500);
+      }, 800);
     } catch (e) {
       setVerifying(false);
       setError(`Exceção JS: ${e instanceof Error ? e.message : String(e)}`);
@@ -149,31 +150,42 @@ export default function LoginPage() {
         {mode === "solicitante" ? (
           sent ? (
             <form onSubmit={handleVerifyCode} className="space-y-3">
-              <p className="text-sm text-vm-ink">
-                Enviamos um código de acesso para <strong>{email}</strong>. Digite-o abaixo para
-                entrar (é mais confiável do que clicar no link do e-mail, que às vezes abre num
-                navegador diferente do que você está usando aqui).
-              </p>
+              {success ? (
+                <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm rounded-lg p-3 flex items-center gap-2">
+                  <CheckIcon />
+                  <span>
+                    <strong>Código confirmado!</strong> Entrando na sua conta...
+                  </span>
+                </div>
+              ) : (
+                <p className="text-sm text-vm-ink">
+                  Enviamos um código de acesso para <strong>{email}</strong>. Digite-o abaixo para
+                  entrar (é mais confiável do que clicar no link do e-mail, que às vezes abre num
+                  navegador diferente do que você está usando aqui).
+                </p>
+              )}
               <Field label="Código recebido por e-mail" value={code} onChange={setCode} />
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              {error && !success && <p className="text-sm text-red-600">{error}</p>}
               <button
                 type="submit"
-                disabled={verifying}
+                disabled={verifying || success}
                 className="w-full bg-vm-ink text-white rounded-lg py-2.5 text-sm font-semibold disabled:opacity-60"
               >
-                {verifying ? "Confirmando..." : "Confirmar código →"}
+                {success ? "Entrando..." : verifying ? "Confirmando..." : "Confirmar código →"}
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSent(false);
-                  setCode("");
-                  setError("");
-                }}
-                className="w-full text-xs text-vm-muted underline"
-              >
-                Usar outro e-mail / pedir novo código
-              </button>
+              {!success && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSent(false);
+                    setCode("");
+                    setError("");
+                  }}
+                  className="w-full text-xs text-vm-muted underline"
+                >
+                  Usar outro e-mail / pedir novo código
+                </button>
+              )}
             </form>
           ) : (
             <form onSubmit={handleSolicitante} className="space-y-3">
@@ -263,6 +275,23 @@ function PasswordField({
         </button>
       </div>
     </label>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      className="shrink-0"
+    >
+      <circle cx="12" cy="12" r="10" strokeWidth="1.5" />
+      <path d="M8 12.5l2.5 2.5L16 9.5" />
+    </svg>
   );
 }
 

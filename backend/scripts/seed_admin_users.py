@@ -23,7 +23,7 @@ from app.config import settings  # noqa: E402
 
 ACCOUNTS = [
     {
-        "email": "admin@vendamais.com.br",
+        "email": "solicitamkt@vendamais.com.br",
         "password": "TROQUE-ESTA-SENHA-DEPOIS-DO-PRIMEIRO-LOGIN",
         "name": "Administrador de Marketing",
         "area": "Marketing",
