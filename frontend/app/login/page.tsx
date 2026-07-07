@@ -9,6 +9,8 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "Token has expired or is invalid": "Esse link expirou ou já foi usado. Peça um novo link de acesso.",
   "Email link is invalid or has expired": "Esse link expirou ou já foi usado. Peça um novo link de acesso.",
   inactivity_timeout: "Você ficou muito tempo sem acessar o sistema. Peça um novo código de acesso para entrar novamente.",
+  session_rejected: "Sua sessão não foi aceita pelo servidor. Entre novamente.",
+  no_profile: "Login autenticado, mas sua conta não tem um perfil ativo no sistema. Fale com o administrador do marketing.",
 };
 
 export default function LoginPage() {
